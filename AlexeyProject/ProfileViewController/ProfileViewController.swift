@@ -14,13 +14,16 @@ protocol ProfileViewDelegate: AnyObject {
 class ProfileInfoViewController: UIViewController {
     
     // MARK: - Properties
-    let infoView = UIStackView()
+    let infoStackView = UIStackView()
     let nameView = InfoView()
     let emailView = EmailView()
     let userAvatarImage = UIImageView()
     
     let changeButton = UIButton()
-    var profile: Profile = .init(name: UserDefaults.standard.string(forKey: "name")!, email: UserDefaults.standard.string(forKey: "email")!, photo: UIImage(named: "Arlene McCoy"))
+    var profile: Profile = .init(
+        name: UserDefaults.standard.string(forKey: "name") ?? "",
+        email:UserDefaults.standard.string(forKey: "email") ?? "",
+        photo: UIImage(named: "noneAvatar"))
     
     // MARK: - LifeCycle
     override func viewDidLoad() {
@@ -40,13 +43,13 @@ class ProfileInfoViewController: UIViewController {
     }
     
     private func addSubviews() {
-        view.addSubview(infoView)
+        view.addSubview(infoStackView)
         view.addSubview(userAvatarImage)
         view.addSubview(changeButton)
     }
     
     private func setupConstraints() {
-        infoView.translatesAutoresizingMaskIntoConstraints = false
+        infoStackView.translatesAutoresizingMaskIntoConstraints = false
         userAvatarImage.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
@@ -55,9 +58,9 @@ class ProfileInfoViewController: UIViewController {
             userAvatarImage.heightAnchor.constraint(equalToConstant: 128),
             userAvatarImage.widthAnchor.constraint(equalToConstant: 128),
             
-            infoView.topAnchor.constraint(equalTo: userAvatarImage.bottomAnchor, constant: 20),
-            infoView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            infoView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            infoStackView.topAnchor.constraint(equalTo: userAvatarImage.bottomAnchor, constant: 20),
+            infoStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            infoStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
         ])
     }
     
@@ -69,18 +72,18 @@ class ProfileInfoViewController: UIViewController {
     
     private func setupStackView() {
         view.backgroundColor = .white
-        infoView.axis = .vertical
-        infoView.distribution = .fillEqually
-        infoView.alignment = .fill
-        infoView.spacing = 8
+        infoStackView.axis = .vertical
+        infoStackView.distribution = .fillEqually
+        infoStackView.alignment = .fill
+        infoStackView.spacing = 8
         
-        infoView.addArrangedSubview(nameView)
-        infoView.addArrangedSubview(emailView)
+        infoStackView.addArrangedSubview(nameView)
+        infoStackView.addArrangedSubview(emailView)
     }
     
     private func setupImageView() {
         userAvatarImage.contentMode = .scaleAspectFill
-        userAvatarImage.layer.cornerRadius = 64
+        userAvatarImage.layer.cornerRadius = 10
         userAvatarImage.layer.masksToBounds = true
     }
     

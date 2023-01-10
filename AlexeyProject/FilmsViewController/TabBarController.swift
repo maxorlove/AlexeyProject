@@ -7,14 +7,14 @@
 
 import UIKit
 
-class FilmsController: UITabBarController, UITabBarControllerDelegate {
+class TabBarController: UITabBarController, UITabBarControllerDelegate {
     
     //MARK: - Properties
-    let filmsTab = File()
     let filmsTabBarItem = UITabBarItem()
-    let profileTab = ProfileInfoViewController()
+    let filmsViewController = UINavigationController(rootViewController: FilmsViewController())
+    let profileViewController = UINavigationController(rootViewController: ProfileInfoViewController())
     let profileBarItem = UITabBarItem()
-    
+   
     //MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -24,15 +24,14 @@ class FilmsController: UITabBarController, UITabBarControllerDelegate {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        filmsTab.tabBarItem = filmsTabBarItem
-        profileTab.tabBarItem = profileBarItem
-        self.viewControllers = [filmsTab, profileTab]
+        filmsViewController.tabBarItem = filmsTabBarItem
+        profileViewController.tabBarItem = profileBarItem
+        self.viewControllers = [filmsViewController, profileViewController]
     }
     
     //MARK: - Methods
     private func setup() {
         setupTabBar()
-        setupNavBar()
     }
     
     private func setupTabBar() {
@@ -45,11 +44,5 @@ class FilmsController: UITabBarController, UITabBarControllerDelegate {
         
         profileBarItem.title = "Profile"
         profileBarItem.image = UIImage(systemName: "person.fill")
-    }
-    
-    private func setupNavBar() {
-        view.backgroundColor = .red
-        title = "Films"
-        navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.black]
     }
 }

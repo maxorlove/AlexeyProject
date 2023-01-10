@@ -59,12 +59,20 @@ class ChangeEmailView: UIView {
     }
     
     private func setupTextFiled() {
+        setupText()
         emailTextField.placeholder = "Your email"
-        emailTextField.text = UserDefaults.standard.string(forKey: "email")
         emailTextField.textAlignment = .left
         emailTextField.borderStyle = UITextField.BorderStyle.roundedRect
         emailTextField.contentVerticalAlignment = .center
         emailTextField.textColor = .blue
         emailTextField.font = UIFont.systemFont(ofSize: 30)
+    }
+    
+    private func setupText() {
+        if UserDefaults.standard.string(forKey: "email") == "" {
+            emailTextField.text = ""
+        } else {
+            emailTextField.text = UserDefaults.standard.string(forKey: "email")
+        }
     }
 }

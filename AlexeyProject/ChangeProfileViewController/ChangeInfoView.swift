@@ -59,12 +59,19 @@ class ChangeInfoView: UIView {
     }
     
     private func setupTextFiled() {
-        nameTextField.placeholder = UserDefaults.standard.string(forKey: "name")
-        nameTextField.text = UserDefaults.standard.string(forKey: "name")
+        setupText()
+        nameTextField.placeholder = "Your name"
         nameTextField.textAlignment = .left
         nameTextField.borderStyle = UITextField.BorderStyle.roundedRect
         nameTextField.contentVerticalAlignment = .center
         nameTextField.textColor = .blue
         nameTextField.font = UIFont.systemFont(ofSize: 30)
+    }
+    private func setupText() {
+        if UserDefaults.standard.string(forKey: "name") == "" {
+            nameTextField.text = ""
+        } else {
+            nameTextField.text = UserDefaults.standard.string(forKey: "name")
+        }
     }
 }

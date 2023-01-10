@@ -10,14 +10,12 @@ import UIKit
 class ChangeProfileInfoViewController: UIViewController {
     
     // MARK: - Properties
-    let infoView = UIStackView()
+    let infoChangeStackView = UIStackView()
     let nameView = ChangeInfoView()
     let emailView = ChangeEmailView()
-    
+
     let changeAvatarImage = UIButton()
     let saveButton = UIButton()
-    
-    let imagePicker = UIImagePickerController()
     
     var profile: Profile?
     weak var delegate: ProfileViewDelegate?
@@ -43,13 +41,13 @@ class ChangeProfileInfoViewController: UIViewController {
     }
     
     private func addSubviews() {
-        view.addSubview(infoView)
+        view.addSubview(infoChangeStackView)
         view.addSubview(changeAvatarImage)
         view.addSubview(saveButton)
     }
     
     private func setupConstraints() {
-        infoView.translatesAutoresizingMaskIntoConstraints = false
+        infoChangeStackView.translatesAutoresizingMaskIntoConstraints = false
         changeAvatarImage.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
@@ -58,9 +56,9 @@ class ChangeProfileInfoViewController: UIViewController {
             changeAvatarImage.heightAnchor.constraint(equalToConstant: 128),
             changeAvatarImage.widthAnchor.constraint(equalToConstant: 128),
             
-            infoView.topAnchor.constraint(equalTo: changeAvatarImage.bottomAnchor, constant: 20),
-            infoView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            infoView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            infoChangeStackView.topAnchor.constraint(equalTo: changeAvatarImage.bottomAnchor, constant: 20),
+            infoChangeStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            infoChangeStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
         ])
     }
     
@@ -72,20 +70,20 @@ class ChangeProfileInfoViewController: UIViewController {
     }
     
     private func setupStackView() {
-        infoView.axis = .vertical
-        infoView.distribution = .fillEqually
-        infoView.alignment = .fill
-        infoView.spacing = 8
+        infoChangeStackView.axis = .vertical
+        infoChangeStackView.distribution = .fillEqually
+        infoChangeStackView.alignment = .fill
+        infoChangeStackView.spacing = 8
         
-        infoView.addArrangedSubview(nameView)
-        infoView.addArrangedSubview(emailView)
+        infoChangeStackView.addArrangedSubview(nameView)
+        infoChangeStackView.addArrangedSubview(emailView)
     }
         
     private func setupImageView() {
         changeAvatarImage.contentMode = .scaleAspectFill
-        changeAvatarImage.layer.cornerRadius = 64
+        changeAvatarImage.layer.cornerRadius = 10
         changeAvatarImage.layer.masksToBounds = true
-        changeAvatarImage.setImage(UIImage(named: "Arlene McCoy"), for: [])
+        changeAvatarImage.setImage((profile?.photo), for: [])
         changeAvatarImage.addTarget(self, action: #selector(changeImage), for: .touchUpInside)
     }
     
@@ -114,7 +112,7 @@ class ChangeProfileInfoViewController: UIViewController {
             self.present(cameraImagePicker, animated: true)
         }
         
-        let libraryAction = UIAlertAction(title: "Library", style: .default) {[weak self] (action) in
+        let libraryAction = UIAlertAction(title: "Library", style: .default) {[ weak self] (action) in
             guard let self = self else {
                 return
             }
@@ -131,11 +129,13 @@ class ChangeProfileInfoViewController: UIViewController {
     }
     
     private func addInfo() {
-        let nameInfo = nameView.nameTextField.text!
-        UserDefaults.standard.set(nameInfo, forKey: "name")
+        if let nameInfo = nameView.nameTextField.text {
+            UserDefaults.standard.set(nameInfo, forKey: "name")
+        }
         
-        let emailInfo = emailView.emailTextField.text!
-        UserDefaults.standard.set(emailInfo, forKey: "email")
+        if let emailInfo = emailView.emailTextField.text {
+            UserDefaults.standard.set(emailInfo, forKey: "email")
+        }
         if let unwrappedProfile = profile {
             delegate?.changingInfo(profile: unwrappedProfile)
         }

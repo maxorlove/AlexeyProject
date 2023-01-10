@@ -7,20 +7,51 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		193A1186296C66A00093DAF8 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 193A1185296C66A00093DAF8 /* TabBarController.swift */; };
+		193A1188296C66B90093DAF8 /* FilmsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 193A1187296C66B90093DAF8 /* FilmsViewController.swift */; };
+		193A118A296C66BB0093DAF8 /* FilmCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 193A1189296C66BB0093DAF8 /* FilmCollectionViewCell.swift */; };
+		193A118C296C67060093DAF8 /* AllFilmsResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 193A118B296C67060093DAF8 /* AllFilmsResponse.swift */; };
+		193A118E296C67080093DAF8 /* Profile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 193A118D296C67080093DAF8 /* Profile.swift */; };
+		193A1190296C670B0093DAF8 /* ChangeInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 193A118F296C670A0093DAF8 /* ChangeInfoView.swift */; };
+		193A1192296C670F0093DAF8 /* ChangeProfileInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 193A1191296C670F0093DAF8 /* ChangeProfileInfoViewController.swift */; };
+		193A1194296C67120093DAF8 /* ChangeEmailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 193A1193296C67120093DAF8 /* ChangeEmailView.swift */; };
+		193A1196296C67160093DAF8 /* EmailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 193A1195296C67160093DAF8 /* EmailView.swift */; };
+		193A1198296C67220093DAF8 /* InfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 193A1197296C67220093DAF8 /* InfoView.swift */; };
+		193A119A296C67250093DAF8 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 193A1199296C67250093DAF8 /* ProfileViewController.swift */; };
+		193A119C296C67320093DAF8 /* AllFilmsRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 193A119B296C67320093DAF8 /* AllFilmsRequest.swift */; };
+		193A119E296C67340093DAF8 /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 193A119D296C67340093DAF8 /* NetworkService.swift */; };
+		193A11A0296C67360093DAF8 /* ServiceManage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 193A119F296C67360093DAF8 /* ServiceManage.swift */; };
+		193A11A2296C67380093DAF8 /* ErrorModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 193A11A1296C67380093DAF8 /* ErrorModel.swift */; };
+		193A11A4296C673B0093DAF8 /* RequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 193A11A3296C673A0093DAF8 /* RequestModel.swift */; };
+		193A11AD296C69E50093DAF8 /* SDWebImage in Frameworks */ = {isa = PBXBuildFile; productRef = 193A11AC296C69E50093DAF8 /* SDWebImage */; };
+		193A11B0296C6A410093DAF8 /* FilmViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 193A11AF296C6A410093DAF8 /* FilmViewController.swift */; };
 		7FA9807C295B24550053E050 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FA9807B295B24550053E050 /* AppDelegate.swift */; };
 		7FA9807E295B24550053E050 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FA9807D295B24550053E050 /* SceneDelegate.swift */; };
-		7FA98080295B24550053E050 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FA9807F295B24550053E050 /* ViewController.swift */; };
-		7FA98083295B24550053E050 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7FA98081295B24550053E050 /* Main.storyboard */; };
 		7FA98085295B24560053E050 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7FA98084295B24560053E050 /* Assets.xcassets */; };
 		7FA98088295B24560053E050 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7FA98086295B24560053E050 /* LaunchScreen.storyboard */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		193A1185296C66A00093DAF8 /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
+		193A1187296C66B90093DAF8 /* FilmsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilmsViewController.swift; sourceTree = "<group>"; };
+		193A1189296C66BB0093DAF8 /* FilmCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilmCollectionViewCell.swift; sourceTree = "<group>"; };
+		193A118B296C67060093DAF8 /* AllFilmsResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllFilmsResponse.swift; sourceTree = "<group>"; };
+		193A118D296C67080093DAF8 /* Profile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Profile.swift; sourceTree = "<group>"; };
+		193A118F296C670A0093DAF8 /* ChangeInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeInfoView.swift; sourceTree = "<group>"; };
+		193A1191296C670F0093DAF8 /* ChangeProfileInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeProfileInfoViewController.swift; sourceTree = "<group>"; };
+		193A1193296C67120093DAF8 /* ChangeEmailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeEmailView.swift; sourceTree = "<group>"; };
+		193A1195296C67160093DAF8 /* EmailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailView.swift; sourceTree = "<group>"; };
+		193A1197296C67220093DAF8 /* InfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoView.swift; sourceTree = "<group>"; };
+		193A1199296C67250093DAF8 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
+		193A119B296C67320093DAF8 /* AllFilmsRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllFilmsRequest.swift; sourceTree = "<group>"; };
+		193A119D296C67340093DAF8 /* NetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkService.swift; sourceTree = "<group>"; };
+		193A119F296C67360093DAF8 /* ServiceManage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceManage.swift; sourceTree = "<group>"; };
+		193A11A1296C67380093DAF8 /* ErrorModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorModel.swift; sourceTree = "<group>"; };
+		193A11A3296C673A0093DAF8 /* RequestModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestModel.swift; sourceTree = "<group>"; };
+		193A11AF296C6A410093DAF8 /* FilmViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilmViewController.swift; sourceTree = "<group>"; };
 		7FA98078295B24550053E050 /* AlexeyProject.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AlexeyProject.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7FA9807B295B24550053E050 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		7FA9807D295B24550053E050 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		7FA9807F295B24550053E050 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		7FA98082295B24550053E050 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		7FA98084295B24560053E050 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		7FA98087295B24560053E050 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		7FA98089295B24560053E050 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -31,12 +62,81 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				193A11AD296C69E50093DAF8 /* SDWebImage in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		193A11A5296C67AA0093DAF8 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				193A119B296C67320093DAF8 /* AllFilmsRequest.swift */,
+				193A118D296C67080093DAF8 /* Profile.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		193A11A6296C67C60093DAF8 /* ProfileViewController */ = {
+			isa = PBXGroup;
+			children = (
+				193A1199296C67250093DAF8 /* ProfileViewController.swift */,
+				193A1195296C67160093DAF8 /* EmailView.swift */,
+				193A1197296C67220093DAF8 /* InfoView.swift */,
+			);
+			path = ProfileViewController;
+			sourceTree = "<group>";
+		};
+		193A11A7296C67E60093DAF8 /* ChangeProfileViewController */ = {
+			isa = PBXGroup;
+			children = (
+				193A1191296C670F0093DAF8 /* ChangeProfileInfoViewController.swift */,
+				193A118F296C670A0093DAF8 /* ChangeInfoView.swift */,
+				193A1193296C67120093DAF8 /* ChangeEmailView.swift */,
+			);
+			path = ChangeProfileViewController;
+			sourceTree = "<group>";
+		};
+		193A11A8296C681F0093DAF8 /* FilmsViewController */ = {
+			isa = PBXGroup;
+			children = (
+				193A1185296C66A00093DAF8 /* TabBarController.swift */,
+				193A1187296C66B90093DAF8 /* FilmsViewController.swift */,
+				193A11AA296C68C40093DAF8 /* FilmViewController */,
+			);
+			path = FilmsViewController;
+			sourceTree = "<group>";
+		};
+		193A11A9296C68490093DAF8 /* Network */ = {
+			isa = PBXGroup;
+			children = (
+				193A118B296C67060093DAF8 /* AllFilmsResponse.swift */,
+				193A11A1296C67380093DAF8 /* ErrorModel.swift */,
+				193A11A3296C673A0093DAF8 /* RequestModel.swift */,
+				193A119F296C67360093DAF8 /* ServiceManage.swift */,
+				193A119D296C67340093DAF8 /* NetworkService.swift */,
+			);
+			path = Network;
+			sourceTree = "<group>";
+		};
+		193A11AA296C68C40093DAF8 /* FilmViewController */ = {
+			isa = PBXGroup;
+			children = (
+				193A11AF296C6A410093DAF8 /* FilmViewController.swift */,
+				193A11AE296C6A250093DAF8 /* FilmCollectionViewCell */,
+			);
+			path = FilmViewController;
+			sourceTree = "<group>";
+		};
+		193A11AE296C6A250093DAF8 /* FilmCollectionViewCell */ = {
+			isa = PBXGroup;
+			children = (
+				193A1189296C66BB0093DAF8 /* FilmCollectionViewCell.swift */,
+			);
+			path = FilmCollectionViewCell;
+			sourceTree = "<group>";
+		};
 		7FA9806F295B24550053E050 = {
 			isa = PBXGroup;
 			children = (
@@ -56,10 +156,13 @@
 		7FA9807A295B24550053E050 /* AlexeyProject */ = {
 			isa = PBXGroup;
 			children = (
+				193A11A5296C67AA0093DAF8 /* Model */,
+				193A11A9296C68490093DAF8 /* Network */,
+				193A11A8296C681F0093DAF8 /* FilmsViewController */,
+				193A11A6296C67C60093DAF8 /* ProfileViewController */,
+				193A11A7296C67E60093DAF8 /* ChangeProfileViewController */,
 				7FA9807B295B24550053E050 /* AppDelegate.swift */,
 				7FA9807D295B24550053E050 /* SceneDelegate.swift */,
-				7FA9807F295B24550053E050 /* ViewController.swift */,
-				7FA98081295B24550053E050 /* Main.storyboard */,
 				7FA98084295B24560053E050 /* Assets.xcassets */,
 				7FA98086295B24560053E050 /* LaunchScreen.storyboard */,
 				7FA98089295B24560053E050 /* Info.plist */,
@@ -83,6 +186,9 @@
 			dependencies = (
 			);
 			name = AlexeyProject;
+			packageProductDependencies = (
+				193A11AC296C69E50093DAF8 /* SDWebImage */,
+			);
 			productName = AlexeyProject;
 			productReference = 7FA98078295B24550053E050 /* AlexeyProject.app */;
 			productType = "com.apple.product-type.application";
@@ -111,6 +217,9 @@
 				Base,
 			);
 			mainGroup = 7FA9806F295B24550053E050;
+			packageReferences = (
+				193A11AB296C69E50093DAF8 /* XCRemoteSwiftPackageReference "SDWebImage" */,
+			);
 			productRefGroup = 7FA98079295B24550053E050 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -127,7 +236,6 @@
 			files = (
 				7FA98088295B24560053E050 /* LaunchScreen.storyboard in Resources */,
 				7FA98085295B24560053E050 /* Assets.xcassets in Resources */,
-				7FA98083295B24550053E050 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -138,23 +246,31 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7FA98080295B24550053E050 /* ViewController.swift in Sources */,
+				193A1188296C66B90093DAF8 /* FilmsViewController.swift in Sources */,
+				193A118E296C67080093DAF8 /* Profile.swift in Sources */,
+				193A118C296C67060093DAF8 /* AllFilmsResponse.swift in Sources */,
+				193A11A4296C673B0093DAF8 /* RequestModel.swift in Sources */,
+				193A119A296C67250093DAF8 /* ProfileViewController.swift in Sources */,
 				7FA9807C295B24550053E050 /* AppDelegate.swift in Sources */,
+				193A11A2296C67380093DAF8 /* ErrorModel.swift in Sources */,
+				193A1198296C67220093DAF8 /* InfoView.swift in Sources */,
+				193A11A0296C67360093DAF8 /* ServiceManage.swift in Sources */,
+				193A1196296C67160093DAF8 /* EmailView.swift in Sources */,
+				193A119C296C67320093DAF8 /* AllFilmsRequest.swift in Sources */,
 				7FA9807E295B24550053E050 /* SceneDelegate.swift in Sources */,
+				193A11B0296C6A410093DAF8 /* FilmViewController.swift in Sources */,
+				193A119E296C67340093DAF8 /* NetworkService.swift in Sources */,
+				193A1192296C670F0093DAF8 /* ChangeProfileInfoViewController.swift in Sources */,
+				193A1190296C670B0093DAF8 /* ChangeInfoView.swift in Sources */,
+				193A1194296C67120093DAF8 /* ChangeEmailView.swift in Sources */,
+				193A118A296C66BB0093DAF8 /* FilmCollectionViewCell.swift in Sources */,
+				193A1186296C66A00093DAF8 /* TabBarController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
-		7FA98081295B24550053E050 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				7FA98082295B24550053E050 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		7FA98086295B24560053E050 /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -292,7 +408,6 @@
 				INFOPLIST_FILE = AlexeyProject/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -320,7 +435,6 @@
 				INFOPLIST_FILE = AlexeyProject/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -358,6 +472,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		193A11AB296C69E50093DAF8 /* XCRemoteSwiftPackageReference "SDWebImage" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SDWebImage/SDWebImage";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		193A11AC296C69E50093DAF8 /* SDWebImage */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 193A11AB296C69E50093DAF8 /* XCRemoteSwiftPackageReference "SDWebImage" */;
+			productName = SDWebImage;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 7FA98070295B24550053E050 /* Project object */;
 }
