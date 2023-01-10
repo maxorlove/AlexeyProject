@@ -65,7 +65,7 @@ class ProfileInfoViewController: UIViewController {
     }
     
     private func setupNavBar() {
-        navigationController?.navigationBar.topItem?.title = "Profile"
+        title = "Profile"
         navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.black]
         navigationController?.navigationBar.topItem?.rightBarButtonItem = UIBarButtonItem(customView: changeButton)
     }

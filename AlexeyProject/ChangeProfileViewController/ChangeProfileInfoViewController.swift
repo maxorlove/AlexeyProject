@@ -26,7 +26,10 @@ class ChangeProfileInfoViewController: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(ChangeProfileInfoViewController.keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
         
         NotificationCenter.default.addObserver(self, selector: #selector(ChangeProfileInfoViewController.keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+        if let profile = profile {
+            configureSelf(with: profile)
             setup()
+        }
     }
     
     // MARK: - Methods
@@ -83,7 +86,6 @@ class ChangeProfileInfoViewController: UIViewController {
         changeAvatarImage.contentMode = .scaleAspectFill
         changeAvatarImage.layer.cornerRadius = 10
         changeAvatarImage.layer.masksToBounds = true
-        changeAvatarImage.setImage((profile?.photo), for: [])
         changeAvatarImage.addTarget(self, action: #selector(changeImage), for: .touchUpInside)
     }
     
@@ -92,6 +94,12 @@ class ChangeProfileInfoViewController: UIViewController {
         saveButton.contentMode = .scaleAspectFit
         saveButton.tintColor = .systemGreen
         saveButton.addTarget(self, action: #selector(saveProfile), for: .touchUpInside)
+    }
+    
+    func configureSelf(with: Profile) {
+        nameView.nameTextField.text = profile?.name
+        emailView.emailTextField.text = profile?.email
+        changeAvatarImage.setImage((profile?.photo), for: [])
     }
     
     private func imagePicker(sourceType: UIImagePickerController.SourceType) -> UIImagePickerController {

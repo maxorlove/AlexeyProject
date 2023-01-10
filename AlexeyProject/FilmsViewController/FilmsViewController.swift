@@ -20,7 +20,7 @@ class FilmsViewController: UIViewController {
     }
     
     private func setupNavBar() {
-        navigationController?.navigationBar.topItem?.title = "Films"
+        title = "Films"
         view.backgroundColor = .systemGreen
         navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.black]
         
