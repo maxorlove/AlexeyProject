@@ -26,10 +26,8 @@ class ChangeProfileInfoViewController: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(ChangeProfileInfoViewController.keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
         
         NotificationCenter.default.addObserver(self, selector: #selector(ChangeProfileInfoViewController.keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
-        if let profile = profile {
-            configureSelf(with: profile)
+            configureSelf()
             setup()
-        }
     }
     
     // MARK: - Methods
@@ -96,9 +94,9 @@ class ChangeProfileInfoViewController: UIViewController {
         saveButton.addTarget(self, action: #selector(saveProfile), for: .touchUpInside)
     }
     
-    func configureSelf(with: Profile) {
-        nameView.nameTextField.text = profile?.name
-        emailView.emailTextField.text = profile?.email
+    func configureSelf() {
+        nameView.nameTextField.text = UserDefaults.standard.string(forKey: "name")
+        emailView.emailTextField.text = UserDefaults.standard.string(forKey: "email")
         changeAvatarImage.setImage((profile?.photo), for: [])
     }
     
