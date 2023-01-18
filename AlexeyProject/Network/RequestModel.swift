@@ -43,7 +43,7 @@ extension RequestModel {
         }
         for parameter in parameters {
             if let value = parameter.value {
-                endpoint.append("\(parameter.key)=\(value)&")
+                endpoint.append("\(parameter.key)\(value)&")
             }
         }
         let urlString = endpoint.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlQueryAllowed)!
@@ -63,7 +63,6 @@ extension RequestModel {
                 print(error)
             }
         }
-
         return request
     }
     

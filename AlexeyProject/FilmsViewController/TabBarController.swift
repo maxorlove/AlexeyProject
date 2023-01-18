@@ -11,7 +11,7 @@ class TabBarController: UITabBarController, UITabBarControllerDelegate {
     
     //MARK: - Properties
     let filmsTabBarItem = UITabBarItem()
-    let filmsViewController = UINavigationController(rootViewController: FilmsViewController())
+    let filmsViewController = UINavigationController(rootViewController: FilmsGridViewController())
     let profileViewController = UINavigationController(rootViewController: ProfileInfoViewController())
     let profileBarItem = UITabBarItem()
    

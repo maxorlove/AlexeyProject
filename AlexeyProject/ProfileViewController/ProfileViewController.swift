@@ -88,7 +88,7 @@ class ProfileInfoViewController: UIViewController {
     }
     
     private func setupButton() {
-        changeButton.setImage(UIImage(systemName: "info.circle"), for: [])
+        changeButton.setImage(UIImage(systemName: "pencil.line"), for: [])
         changeButton.contentMode = .scaleAspectFit
         changeButton.tintColor = .systemRed
         changeButton.addTarget(self, action: #selector(changeProfile), for: .touchUpInside)
