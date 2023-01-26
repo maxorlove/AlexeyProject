@@ -7,7 +7,7 @@
 
 import UIKit
 
-class InfoView: UIView {
+class NameView: UIView {
     
     //MARK: - Properties
     let nameLabel = UILabel()
@@ -52,11 +52,11 @@ class InfoView: UIView {
     
     private func setupLabel() {
         nameLabel.text = "Name"
-        nameLabel.textColor = .black
+        nameLabel.textColor = Colors.primaryTextOnSurfaceColor
         nameLabel.font = UIFont.systemFont(ofSize: 27, weight: .bold)
         nameLabel.textAlignment = .left
         
-        nameText.textColor = .black
+        nameText.textColor = Colors.secondarySurfaceColor
         nameText.font = UIFont.systemFont(ofSize: 18, weight: .medium)
         nameText.textAlignment = .left
     }

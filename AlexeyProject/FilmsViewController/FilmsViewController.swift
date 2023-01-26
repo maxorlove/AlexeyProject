@@ -20,93 +20,91 @@ class FilmsGridViewController: UIViewController {
         return collectionView
     }()
     
-    private let networkPopularFims = NetworkServiceImplForPopularFilms()
-//    private let networkLatestFims = NetworkServiceImplForLatestFilms()
-//    private let networkUpcomingFims = NetworkServiceImplForUpcomingFilms()
-//    private let networkClient2 = NetworkServiceImpForFilm()
-    private var dataSource: [Films] = []
-    var filmDataSource: FilmResponse?
+    private let networkFilms = NetworkServiceImplForFilms()
+    private var dataSource: [Film] = []
     private var currentPage: Int = 1
     private var totalPages: Int = 1
-    private let onethreeButton = UIButton()
-    private let sortFilms = UIButton()
-    private var oneThree : Bool = false
-//    private var info = FilmViewController()
+    private let switchCollectionButton = UIButton()
+    private let sortFilmsButton = UIButton()
+    private let activityIndicator = UIActivityIndicatorView(style: .large)
+    private var selectedLayout: CellLayout = .twoCell
+    private var selectedSorting: SelectedSortingFilms = .popular
     
-    private enum OneThreeCell {
-        static var gridCellReuseId = "GridCollectionViewCellIdentifier"
-        static var numberOfItemsInRow: CGFloat = 3
-        static var itemSizeWidth: CGFloat = UIScreen.main.bounds.width/numberOfItemsInRow - spacing
-        static var itemSizeHeight: CGFloat = UIScreen.main.bounds.height/5
-        static var spacing: CGFloat = 5
+    private enum CellLayout {
+        case oneCell
+        case twoCell
+    }
+    
+    private enum SelectedSortingFilms {
+        case popular
+        case latest
+        case upcomimng
+    }
+    
+    private enum ConstantsForCell {
+        static let twoCellReuseId = "GridCollectionViewCellIdentifier"
+        static let oneCellReuseId = "OneCollectionViewCellIdentifier"
+        static let numberOfItemsInRow: CGFloat = 2
+        static let spacingForOne: CGFloat = 0
+        static let spacingForTwo: CGFloat = 8
+        static let cellWidthForOne = UIScreen.main.bounds.width
+        static let cellWidthForTwo = UIScreen.main.bounds.width/numberOfItemsInRow - 12
+        static let cellHeightForOne: CGFloat = 204
+        static let cellHeightForTwo: CGFloat = 276
+        static let insetForSectionOne = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+        static let insetForSectionTwo = UIEdgeInsets(top: 4, left: 8, bottom: 0, right: 8)
     }
     
     // MARK: - LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
-        loadData1(for: currentPage)
     }
     
     // MARK: - Methods
-    private func loadData1(for page: Int) {
-        networkPopularFims.allPopularFilms(page: page) { [weak self] result in
-            switch result {
-                case .success(let response):
-                DispatchQueue.main.async {
-                    self?.dataSource.append(contentsOf: response.results)
-                        //мб переделаю, чтобы всё парсилось сразу на главном экране
-//                    for film in response.results {
-//                        self?.networkClient2.film(id: film.id) { [weak self] result in
-//                            switch result {
-//                                case .success(let responseFilm):
-//                                DispatchQueue.main.async {
-//                                    self?.filmDataSource = responseFilm
-//                                }
-//                                case .failure(let error):
-//                                error.localizedDescription
-//                                    break
-//                            }
-//                        }
-//                    }
-                    self?.totalPages = response.totalPages 
-                    self?.collectionView.reloadData()
+    private func loadData(for page: Int) {
+        switch selectedSorting{
+        case .popular:
+            networkFilms.allPopularFilms(page: page) { [weak self] result in
+                switch result {
+                    case .success(let response):
+                    DispatchQueue.main.async {
+                        self?.activityIndicator.stopAnimating()
+                        self?.dataSource.append(contentsOf: response.results)
+                        self?.totalPages = response.totalPages
+                        self?.collectionView.reloadData()
+                    }
+                    case .failure(let error):
+                    error.localizedDescription
                 }
-                case .failure(let error):
-                error.localizedDescription
-                    break
             }
-        }
-    }
-    
-    private func loadData2(for page: Int) {
-        networkPopularFims.allLatestFilms(page: page) { [weak self] result in
-            switch result {
-                case .success(let response):
-                DispatchQueue.main.async {
-                    self?.dataSource.append(contentsOf: response.results)
-                    self?.totalPages = response.totalPages
-                    self?.collectionView.reloadData()
+        case .latest:
+            networkFilms.allLatestFilms(page: page) { [weak self] result in
+                switch result {
+                    case .success(let response):
+                    DispatchQueue.main.async {
+                        self?.activityIndicator.stopAnimating()
+                        self?.dataSource.append(contentsOf: response.results)
+                        self?.totalPages = response.totalPages
+                        self?.collectionView.reloadData()
+                    }
+                    case .failure(let error):
+                    error.localizedDescription
                 }
-                case .failure(let error):
-                error.localizedDescription
-                    break
             }
-        }
-    }
-    
-    private func loadData3(for page: Int) {
-        networkPopularFims.allUpcomingFilms(page: page) { [weak self] result in
-            switch result {
-            case .success(let response):
-                DispatchQueue.main.async {
-                    self?.dataSource.append(contentsOf: response.results)
-                    self?.totalPages = response.totalPages
-                    self?.collectionView.reloadData()
+        case .upcomimng:
+            networkFilms.allUpcomingFilms(page: page) { [weak self] result in
+                switch result {
+                case .success(let response):
+                    DispatchQueue.main.async {
+                        self?.activityIndicator.stopAnimating()
+                        self?.dataSource.append(contentsOf: response.results)
+                        self?.totalPages = response.totalPages
+                        self?.collectionView.reloadData()
+                    }
+                case .failure(let error):
+                    error.localizedDescription
                 }
-            case .failure(let error):
-                error.localizedDescription
-                break
             }
         }
     }
@@ -117,15 +115,20 @@ class FilmsGridViewController: UIViewController {
         setupCollectionView()
         setupNavBar()
         setupButton()
+        loadData(for: currentPage)
+        activityIndicator.startAnimating()
     }
     
     private func addSubviews() {
         view.addSubview(collectionView)
-        view.addSubview(onethreeButton)
-        view.addSubview(sortFilms)
+        view.addSubview(switchCollectionButton)
+        view.addSubview(sortFilmsButton)
+        view.addSubview(activityIndicator)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
-        onethreeButton.translatesAutoresizingMaskIntoConstraints = false
-        sortFilms.translatesAutoresizingMaskIntoConstraints = false
+        switchCollectionButton.translatesAutoresizingMaskIntoConstraints = false
+        sortFilmsButton.translatesAutoresizingMaskIntoConstraints = false
+        activityIndicator.translatesAutoresizingMaskIntoConstraints = false
+        activityIndicator.hidesWhenStopped = true
     }
     
     private func layout() {
@@ -134,92 +137,111 @@ class FilmsGridViewController: UIViewController {
             collectionView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
             collectionView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
             collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            
+            sortFilmsButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 61.81),
+            sortFilmsButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -16),
+            
+            switchCollectionButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -61.81),
+            switchCollectionButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -16),
+            
+            activityIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            activityIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor)
         ])
     }
     
     private func setupNavBar() {
-        title = "Films"
-        view.backgroundColor = .systemGreen
-        navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.black]
-        navigationController?.navigationBar.topItem?.rightBarButtonItem = UIBarButtonItem(customView: sortFilms)
-        navigationController?.navigationBar.topItem?.leftBarButtonItem = UIBarButtonItem(customView: onethreeButton)
+        navigationItem.title = "Movies"
+        navigationItem.largeTitleDisplayMode = .automatic
+        navigationController?.navigationBar.prefersLargeTitles = true
+        navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
+        navigationController?.navigationBar.largeTitleTextAttributes = [ NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 54)]
+        navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: Colors.primaryTextOnSurfaceColor ?? .white]
+        view.backgroundColor = Colors.primaryBackGroundColor
     }
     
     private func setupCollectionView() {
         collectionView.delegate = self
         collectionView.dataSource = self
-        collectionView.register(FilmGridCollectionViewCell.self, forCellWithReuseIdentifier: OneThreeCell.gridCellReuseId)
+        collectionView.register(FilmGridCollectionViewCell.self, forCellWithReuseIdentifier: ConstantsForCell.twoCellReuseId)
+        collectionView.register(OneFilmCollectionViewCell.self, forCellWithReuseIdentifier: ConstantsForCell.oneCellReuseId)
     }
     
     private func setupButton() {
-        onethreeButton.setImage(UIImage(systemName: "list.bullet.clipboard"), for: [])
-        onethreeButton.contentMode = .scaleAspectFill
-        onethreeButton.tintColor = .systemRed
-        onethreeButton.addTarget(self, action: #selector(oneThreeFilms), for: .touchUpInside)
-        navigationItem.leftBarButtonItem = UIBarButtonItem(customView: onethreeButton)
+        switchCollectionButton.setImage(UIImage(named: "oneCell"), for: [])
+        switchCollectionButton.contentMode = .scaleAspectFill
+        switchCollectionButton.addTarget(self, action: #selector(switchCollectionOfFilms), for: .touchUpInside)
         
-        sortFilms.setImage(UIImage(systemName: "questionmark.app"), for: [])
-        sortFilms.contentMode = .scaleAspectFill
-        sortFilms.tintColor = .systemRed
-        sortFilms.addTarget(self, action: #selector(sortingFilms), for: .touchUpInside)
-        navigationItem.rightBarButtonItem = UIBarButtonItem(customView: sortFilms)
+        sortFilmsButton.setImage(UIImage(named: "sort"), for: [])
+        sortFilmsButton.contentMode = .scaleAspectFill
+        sortFilmsButton.addTarget(self, action: #selector(sortingFilms), for: .touchUpInside)
     }
     
-    private func oneThreeCell() {
-        if oneThree == false {
-            OneThreeCell.spacing = 5
-            OneThreeCell.numberOfItemsInRow = 1
-            OneThreeCell.itemSizeHeight = UIScreen.main.bounds.height/1.45
-            OneThreeCell.itemSizeWidth = UIScreen.main.bounds.width/OneThreeCell.numberOfItemsInRow - OneThreeCell.spacing
-            oneThree = true
+    private func switchCollectionLayout() {
+        if selectedLayout == CellLayout.twoCell {
+            selectedLayout = CellLayout.oneCell
+            switchCollectionButton.setImage(UIImage(named: "twoCell"), for: [])
         } else {
-            oneThree = false
-            OneThreeCell.spacing = 5
-            OneThreeCell.numberOfItemsInRow = 3
-            OneThreeCell.itemSizeHeight = UIScreen.main.bounds.height/5
-            OneThreeCell.itemSizeWidth = UIScreen.main.bounds.width/OneThreeCell.numberOfItemsInRow - OneThreeCell.spacing
+            selectedLayout = CellLayout.twoCell
+            switchCollectionButton.setImage(UIImage(named: "oneCell"), for: [])
         }
         collectionView.reloadData()
     }
     
     private func sortAlert() {
         let alert = UIAlertController(title: "Pick a Sort", message: "Sort by ", preferredStyle: .actionSheet)
-
+        
         let popularAction = UIAlertAction(title: "Popular", style: .default) {[weak self] (action) in
-            guard let self = self else {
+            guard self != nil else {
                 return
             }
-            self.loadData1(for: self.currentPage)
+            self?.selectedSorting = SelectedSortingFilms.popular
+            if self?.selectedSorting == SelectedSortingFilms.popular {
+                self?.loadData(for: self?.currentPage ?? 1)
+            }
         }
-
+        
         let latestAction = UIAlertAction(title: "Latest", style: .default) {[ weak self] (action) in
             guard let self = self else {
                 return
             }
-            self.loadData2(for: self.currentPage)
+            self.selectedSorting = SelectedSortingFilms.latest
+            if self.selectedSorting == SelectedSortingFilms.latest {
+                self.loadData(for: self.currentPage)
+            }
         }
         
         let upcomingAction = UIAlertAction(title: "Upcoming", style: .default) {[ weak self] (action) in
             guard let self = self else {
                 return
             }
-            self.loadData3(for: self.currentPage)
+            self.selectedSorting = SelectedSortingFilms.upcomimng
+            if self.selectedSorting == SelectedSortingFilms.upcomimng {
+                self.loadData(for: self.currentPage)
+            }
         }
         
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
+        
         alert.addAction(popularAction)
         alert.addAction(latestAction)
         alert.addAction(upcomingAction)
         alert.addAction(cancelAction)
         self.present(alert, animated: true, completion: nil)
     }
+    
+    private func refreshDataSource() {
+        dataSource = []
+        currentPage = 1
+        totalPages = 1
+    }
 
     @objc func sortingFilms(sender: UIButton) {
         sortAlert()
+        refreshDataSource()
     }
     
-    @objc func oneThreeFilms(sender: UIButton) {
-        oneThreeCell()
+    @objc func switchCollectionOfFilms(sender: UIButton) {
+        switchCollectionLayout()
     }
 }
 
@@ -231,35 +253,72 @@ extension FilmsGridViewController: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let model = dataSource[indexPath.row]
-        let cell = collectionView.dequeueReusableCell(
-            withReuseIdentifier: OneThreeCell.gridCellReuseId,
-            for: indexPath
-        ) as! FilmGridCollectionViewCell
-        cell.configure(with: model)
-        return cell
+        let film = dataSource[indexPath.row]
+        
+        switch selectedLayout{
+        case .oneCell:
+            let cell = collectionView.dequeueReusableCell(
+                withReuseIdentifier: ConstantsForCell.oneCellReuseId,
+                for: indexPath
+            ) as! OneFilmCollectionViewCell
+            cell.configure(with: film)
+            return cell
+            
+        case .twoCell:
+            let cell = collectionView.dequeueReusableCell(
+                withReuseIdentifier: ConstantsForCell.twoCellReuseId,
+                for: indexPath
+            ) as! FilmGridCollectionViewCell
+            cell.configure(with: film)
+            return cell
+        }
     }
 }
 
 //MARK: - UICollectionViewDelegateFlowLayout
 extension FilmsGridViewController: UICollectionViewDelegateFlowLayout {
-
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: OneThreeCell.itemSizeWidth, height: OneThreeCell.itemSizeHeight)
+        switch selectedLayout{
+        case .oneCell:
+            return CGSize(width: ConstantsForCell.cellWidthForOne, height: ConstantsForCell.cellHeightForOne)
+    
+        case .twoCell:
+            return CGSize(width: ConstantsForCell.cellWidthForTwo, height: ConstantsForCell.cellHeightForTwo)
+        }
     }
-
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        return 0
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        switch selectedLayout{
+        case .oneCell:
+            return ConstantsForCell.insetForSectionOne
+    
+        case .twoCell:
+            return ConstantsForCell.insetForSectionTwo
+        }
     }
+    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        return OneThreeCell.spacing
+        switch selectedLayout{
+        case .oneCell:
+            return ConstantsForCell.spacingForOne
+    
+        case .twoCell:
+            return ConstantsForCell.spacingForTwo
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         if dataSource.count - 3 == indexPath.row,
-        currentPage < totalPages {
+           currentPage < totalPages {
             currentPage += 1
-            loadData1(for: currentPage)
+            switch selectedSorting{
+            case .popular:
+                loadData(for: currentPage)
+            case .latest:
+                loadData(for: currentPage)
+            case .upcomimng:
+                loadData(for: currentPage)
+            }
         }
     }
     
@@ -272,8 +331,7 @@ extension FilmsGridViewController: UICollectionViewDelegateFlowLayout {
 
 // MARK: - Routing
 extension FilmsGridViewController {
-    
-    func openFilmScreen(film: Films) {
+    func openFilmScreen(film: Film) {
         let controller = FilmViewController()
         controller.film = film
         navigationController?.pushViewController(controller, animated: true)

@@ -10,15 +10,16 @@ import UIKit
 class ChangeProfileInfoViewController: UIViewController {
     
     // MARK: - Properties
-    let infoChangeStackView = UIStackView()
-    let nameView = ChangeInfoView()
-    let emailView = ChangeEmailView()
+   private let infoChangeStackView = UIStackView()
+   private let nameView = ChangeInfoView()
+   private let emailView = ChangeEmailView()
 
-    let changeAvatarImage = UIButton()
-    let saveButton = UIButton()
+   private let changeAvatarImage = UIButton()
+   private let saveButton = UIButton()
     
     var profile: Profile?
     weak var delegate: ProfileViewDelegate?
+    var activeTextField : UITextField?
 
     // MARK: - LifeCycle
     override func viewDidLoad() {
@@ -26,8 +27,9 @@ class ChangeProfileInfoViewController: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(ChangeProfileInfoViewController.keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
         
         NotificationCenter.default.addObserver(self, selector: #selector(ChangeProfileInfoViewController.keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
-            configureSelf()
-            setup()
+        configureSelf()
+        setup()
+        delegateTextField()
     }
     
     // MARK: - Methods
@@ -38,7 +40,17 @@ class ChangeProfileInfoViewController: UIViewController {
         setupImageView()
         setupButton()
         setupStackView()
-        view.backgroundColor = .white
+    }
+    
+    func configureSelf() {
+        nameView.nameTextField.text = UserDefaults.standard.string(forKey: "name")
+        emailView.emailTextField.text = UserDefaults.standard.string(forKey: "email")
+        
+        if let imageData = UserDefaults.standard.object(forKey: "photo") as? Data {
+            changeAvatarImage.setImage(UIImage(data: imageData), for: [])
+        } else {
+            changeAvatarImage.setImage(profile?.photo, for: [])
+        }
     }
     
     private func addSubviews() {
@@ -52,25 +64,28 @@ class ChangeProfileInfoViewController: UIViewController {
         changeAvatarImage.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-            changeAvatarImage.topAnchor.constraint(equalTo: view.topAnchor, constant: 127),
+            changeAvatarImage.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
             changeAvatarImage.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            changeAvatarImage.heightAnchor.constraint(equalToConstant: 128),
-            changeAvatarImage.widthAnchor.constraint(equalToConstant: 128),
+            changeAvatarImage.heightAnchor.constraint(equalToConstant: 180),
+            changeAvatarImage.widthAnchor.constraint(equalToConstant: 180),
             
-            infoChangeStackView.topAnchor.constraint(equalTo: changeAvatarImage.bottomAnchor, constant: 20),
+            infoChangeStackView.topAnchor.constraint(equalTo: changeAvatarImage.bottomAnchor, constant: 10),
             infoChangeStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             infoChangeStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
         ])
     }
     
     private func setupNavBar() {
-        title = "Edit Profile"
-        navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.black]
-        navigationController?.navigationBar.tintColor = .black
+        navigationItem.title = "Edit Profile"
+        navigationController?.navigationBar.largeTitleTextAttributes = [ NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 54)]
+        navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: Colors.primaryTextOnSurfaceColor ?? .white]
+        navigationController?.navigationBar.backgroundColor = Colors.primaryBackGroundColor
+        navigationController?.navigationBar.tintColor = Colors.primaryTextOnSurfaceColor
         navigationItem.rightBarButtonItem = UIBarButtonItem(customView: saveButton)
     }
     
     private func setupStackView() {
+        view.backgroundColor = Colors.primaryBackGroundColor
         infoChangeStackView.axis = .vertical
         infoChangeStackView.distribution = .fillEqually
         infoChangeStackView.alignment = .fill
@@ -82,7 +97,7 @@ class ChangeProfileInfoViewController: UIViewController {
         
     private func setupImageView() {
         changeAvatarImage.contentMode = .scaleAspectFill
-        changeAvatarImage.layer.cornerRadius = 10
+        changeAvatarImage.layer.cornerRadius = 90
         changeAvatarImage.layer.masksToBounds = true
         changeAvatarImage.addTarget(self, action: #selector(changeImage), for: .touchUpInside)
     }
@@ -94,10 +109,9 @@ class ChangeProfileInfoViewController: UIViewController {
         saveButton.addTarget(self, action: #selector(saveProfile), for: .touchUpInside)
     }
     
-    func configureSelf() {
-        nameView.nameTextField.text = UserDefaults.standard.string(forKey: "name")
-        emailView.emailTextField.text = UserDefaults.standard.string(forKey: "email")
-        changeAvatarImage.setImage((profile?.photo), for: [])
+    private func delegateTextField() {
+        nameView.nameTextField.delegate = self
+        emailView.emailTextField.delegate = self
     }
     
     private func imagePicker(sourceType: UIImagePickerController.SourceType) -> UIImagePickerController {
@@ -142,6 +156,7 @@ class ChangeProfileInfoViewController: UIViewController {
         if let emailInfo = emailView.emailTextField.text {
             UserDefaults.standard.set(emailInfo, forKey: "email")
         }
+    
         if let unwrappedProfile = profile {
             delegate?.changingInfo(profile: unwrappedProfile)
         }
@@ -160,7 +175,19 @@ class ChangeProfileInfoViewController: UIViewController {
         guard let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue else {
             return
         }
-        self.view.frame.origin.y = 0
+        
+        var shouldMoveViewUp = false
+        if let activeTextField = activeTextField {
+            let bottomOfTextField = activeTextField.convert(activeTextField.bounds, to: self.view).maxY;
+            let topOfKeyboard = self.view.frame.height - keyboardSize.height
+            if bottomOfTextField > topOfKeyboard {
+                shouldMoveViewUp = true
+            }
+        }
+        
+        if(shouldMoveViewUp) {
+            self.view.frame.origin.y = 0 - 100
+        }
     }
     
     @objc func keyboardWillHide(notification: NSNotification) {
@@ -171,9 +198,13 @@ class ChangeProfileInfoViewController: UIViewController {
 // MARK: - UIImagePickerControllerDelegate
 extension ChangeProfileInfoViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-        if let image = (info[.originalImage] as? UIImage) {
+        if let image = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
+            let dataImage = image.pngData()! as NSData
+            UserDefaults.standard.set(dataImage, forKey: "photo")            
             self.changeAvatarImage.setImage(image, for: [])
         } else if let image = info[.editedImage] as? UIImage {
+            let dataImage = image.pngData()! as NSData
+            UserDefaults.standard.set(dataImage, forKey: "photo")
             self.changeAvatarImage.setImage(image, for: [])
         }
         self.dismiss(animated: true, completion: nil)
@@ -184,4 +215,14 @@ extension ChangeProfileInfoViewController: UIImagePickerControllerDelegate, UINa
     }
 }
 
+//MARK: - UITextFieldDelegate
+extension ChangeProfileInfoViewController: UITextFieldDelegate {
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        self.activeTextField = textField
+    }
+    
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        self.activeTextField = nil
+    }
+}
 

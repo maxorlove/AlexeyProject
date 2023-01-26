@@ -17,6 +17,8 @@ final class FilmGridCollectionViewCell: UICollectionViewCell {
     private let releaseLabel = UILabel()
     private let voteLabel = UILabel()
     private let baseImageUrl = ServiceManager()
+    private let customBlurEffectViewForVote = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
+    private let customBlurEffectView = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
     
     //MARK: - Lifecycle
     override public init(frame: CGRect) {
@@ -34,62 +36,80 @@ final class FilmGridCollectionViewCell: UICollectionViewCell {
         layout()
         setupImageView()
         setupLabel()
-        posterImageView.backgroundColor = .clear
     }
     
     private func addSubviews() {
         contentView.addSubview(posterImageView)
+        contentView.addSubview(customBlurEffectView)
+        contentView.addSubview(customBlurEffectViewForVote)
         contentView.addSubview(ratingImageView)
         contentView.addSubview(titleLabel)
-        contentView.addSubview(releaseLabel)
         contentView.addSubview(voteLabel)
     }
     
     private func layout(){
         posterImageView.translatesAutoresizingMaskIntoConstraints = false
+        customBlurEffectViewForVote.translatesAutoresizingMaskIntoConstraints = false
+        customBlurEffectView.translatesAutoresizingMaskIntoConstraints = false
         ratingImageView.translatesAutoresizingMaskIntoConstraints = false
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
-        releaseLabel.translatesAutoresizingMaskIntoConstraints = false
         voteLabel.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
             posterImageView.topAnchor.constraint(equalTo: contentView.topAnchor),
             posterImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            posterImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
             posterImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            posterImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
             
-            titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -6),
-            titleLabel.leadingAnchor.constraint(equalTo: posterImageView.leadingAnchor, constant: 6),
-            titleLabel.bottomAnchor.constraint(equalTo: releaseLabel.topAnchor, constant: -4),
+            customBlurEffectView.leadingAnchor.constraint(equalTo: posterImageView.leadingAnchor,constant: 4),
+            customBlurEffectView.trailingAnchor.constraint(equalTo: posterImageView.trailingAnchor,constant: -4.5),
+            customBlurEffectView.bottomAnchor.constraint(equalTo: posterImageView.bottomAnchor, constant: -4),
+            customBlurEffectView.heightAnchor.constraint(equalToConstant: 64),
+            customBlurEffectView.widthAnchor.constraint(equalToConstant: 176.5),
             
-            releaseLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -6),
-            releaseLabel.leadingAnchor.constraint(equalTo: posterImageView.leadingAnchor, constant: 6),
-            releaseLabel.bottomAnchor.constraint(equalTo: ratingImageView.topAnchor, constant: -4),
+            titleLabel.topAnchor.constraint(equalTo: customBlurEffectView.topAnchor, constant: 8),
+            titleLabel.leadingAnchor.constraint(equalTo: customBlurEffectView.leadingAnchor, constant: 12),
+            titleLabel.trailingAnchor.constraint(equalTo: customBlurEffectView.trailingAnchor, constant: -12),
             
-            ratingImageView.leadingAnchor.constraint(equalTo: posterImageView.leadingAnchor, constant: 6),
-            ratingImageView.heightAnchor.constraint(equalToConstant: 15),
-            ratingImageView.widthAnchor.constraint(equalToConstant: 15),
-            ratingImageView.bottomAnchor.constraint(equalTo: posterImageView.bottomAnchor, constant: -2),
+            customBlurEffectViewForVote.topAnchor.constraint(equalTo: posterImageView.topAnchor, constant: 4),
+            customBlurEffectViewForVote.trailingAnchor.constraint(equalTo: posterImageView.trailingAnchor, constant: -4),
+            customBlurEffectViewForVote.heightAnchor.constraint(equalToConstant: 32),
+            customBlurEffectViewForVote.widthAnchor.constraint(equalToConstant: 66),
             
-            voteLabel.trailingAnchor.constraint(equalTo: posterImageView.trailingAnchor, constant: -6),
-            voteLabel.leadingAnchor.constraint(equalTo: ratingImageView.trailingAnchor, constant: 6),
-            voteLabel.centerYAnchor.constraint(equalTo: ratingImageView.centerYAnchor, constant: -2),
+            voteLabel.topAnchor.constraint(equalTo: customBlurEffectViewForVote.topAnchor, constant: 7),
+            voteLabel.trailingAnchor.constraint(equalTo: customBlurEffectViewForVote.trailingAnchor, constant: -10),
+            voteLabel.bottomAnchor.constraint(equalTo: customBlurEffectViewForVote.bottomAnchor, constant: -7),
+            
+            ratingImageView.leadingAnchor.constraint(equalTo: customBlurEffectViewForVote.leadingAnchor, constant: 9.67),
+            ratingImageView.heightAnchor.constraint(equalToConstant: 16.67),
+            ratingImageView.widthAnchor.constraint(equalToConstant: 16.67),
+            ratingImageView.centerYAnchor.constraint(equalTo: voteLabel.centerYAnchor)
         ])
     }
         
     private func setupImageView() {
-        posterImageView.contentMode = .scaleAspectFit
-        posterImageView.layer.cornerRadius = 10
+        posterImageView.contentMode = .scaleAspectFill
+        posterImageView.layer.cornerRadius = 12
         posterImageView.layer.masksToBounds = true
+        posterImageView.backgroundColor = .clear
         
         ratingImageView.contentMode = .scaleAspectFill
-        ratingImageView.layer.cornerRadius = 10
-        ratingImageView.layer.masksToBounds = true
         ratingImageView.image = UIImage(systemName: "star.fill")
-        ratingImageView.tintColor = .blue
+        ratingImageView.tintColor = Colors.accentTextColor
+        
+        customBlurEffectViewForVote.layer.cornerRadius = 12
+        customBlurEffectView.layer.cornerRadius = 13
+        customBlurEffectViewForVote.clipsToBounds = true
+        customBlurEffectView.clipsToBounds = true
+        
+        contentView.layer.shadowColor = UIColor.black.cgColor
+        contentView.layer.shadowOpacity = 0.2
+        contentView.layer.shadowOffset = CGSize.zero
+        contentView.layer.shadowRadius = 12
+        contentView.layer.masksToBounds = false
     }
     
-    func configure(with model: Films) {
+    func configure(with model: Film) {
         titleLabel.text = "\(model.title)"
         releaseLabel.text = "\(model.releaseDate)"
         voteLabel.text = "\(model.voteAverage)"
@@ -98,17 +118,15 @@ final class FilmGridCollectionViewCell: UICollectionViewCell {
     }
     
     private func setupLabel() {
+        titleLabel.font = UIFont.systemFont(ofSize: 20)
         titleLabel.textAlignment = .left
-        titleLabel.textColor = .white
-        titleLabel.numberOfLines = 0
+        titleLabel.textColor = Colors.accentTextColor
+        titleLabel.numberOfLines = 2
         
-        releaseLabel.textAlignment = .left
-        releaseLabel.textColor = .white
-        releaseLabel.numberOfLines = 0
-        
-        voteLabel.textAlignment = .left
-        voteLabel.textColor = .white
-        voteLabel.numberOfLines = 0
+        voteLabel.font = UIFont.systemFont(ofSize: 15)
+        voteLabel.textAlignment = .center
+        voteLabel.textColor = Colors.accentTextColor
+        voteLabel.numberOfLines = 1
     }
     
     override func prepareForReuse() {

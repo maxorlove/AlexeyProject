@@ -27,22 +27,22 @@ struct FilmResponse: Codable {
         case releaseDate = "release_date"
         case voteAverage = "vote_average"
         case runtime = "runtime"
-        case productionCompanies = "production_companies"
         case budget = "budget"
         case revenue = "revenue"
+        case productionCompanies = "production_companies"
         case productionCountry = "production_countries"
     }
     
     struct ProductionCompanies: Codable {
-        let logoPath: String
+        let logoPath: String?
         let name: String
-        
+
         enum CodingKeys: String, CodingKey {
             case logoPath = "logo_path"
             case name = "name"
         }
     }
-    
+
     struct ProductionCountry: Codable {
         let name: String
     }
