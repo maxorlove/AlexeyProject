@@ -52,11 +52,11 @@ class EmailView: UIView {
     
     private func setupLabel() {
         emailLabel.text = "Email"
-        emailLabel.textColor = .black
+        emailLabel.textColor = Colors.primaryTextOnSurfaceColor
         emailLabel.font = UIFont.systemFont(ofSize: 27, weight: .bold)
         emailLabel.textAlignment = .left
         
-        emailText.textColor = .black
+        emailText.textColor = Colors.secondarySurfaceColor
         emailText.font = UIFont.systemFont(ofSize: 18, weight: .medium)
         emailText.textAlignment = .left
     }

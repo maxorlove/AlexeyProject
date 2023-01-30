@@ -11,7 +11,8 @@ class ServiceManager {
 
     public static let shared: ServiceManager = ServiceManager()
 
-    public var baseURL: String = "https://rickandmortyapi.com/"
+    public var baseImageURL: String = "https://image.tmdb.org/t/p/original"
+    public var baseURL: String = "https://api.themoviedb.org/"
 }
 
 extension ServiceManager {
@@ -20,7 +21,6 @@ extension ServiceManager {
 
         let task = URLSession.shared.dataTask(with: request.urlRequest()) { data, response, error in
             let decoder = JSONDecoder()
-            decoder.keyDecodingStrategy = .convertFromSnakeCase
             guard
                 let data = data,
                   let decodedModel = try? decoder.decode(T.self, from: data) else {

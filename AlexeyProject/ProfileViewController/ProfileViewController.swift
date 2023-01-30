@@ -14,16 +14,17 @@ protocol ProfileViewDelegate: AnyObject {
 class ProfileInfoViewController: UIViewController {
     
     // MARK: - Properties
-    let infoStackView = UIStackView()
-    let nameView = InfoView()
-    let emailView = EmailView()
-    let userAvatarImage = UIImageView()
+   private let infoStackView = UIStackView()
+   private let nameView = NameView()
+   private let emailView = EmailView()
+   private let userAvatarImage = UIImageView()
     
-    let changeButton = UIButton()
+   private let changeButton = UIButton()
     var profile: Profile = .init(
         name: UserDefaults.standard.string(forKey: "name") ?? "",
-        email:UserDefaults.standard.string(forKey: "email") ?? "",
-        photo: UIImage(named: "noneAvatar"))
+        email: UserDefaults.standard.string(forKey: "email") ?? "",
+        photo: UIImage(named: "noneAvatar")
+        )
     
     // MARK: - LifeCycle
     override func viewDidLoad() {
@@ -53,25 +54,29 @@ class ProfileInfoViewController: UIViewController {
         userAvatarImage.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-            userAvatarImage.topAnchor.constraint(equalTo: view.topAnchor, constant: 127),
+            userAvatarImage.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
             userAvatarImage.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            userAvatarImage.heightAnchor.constraint(equalToConstant: 128),
-            userAvatarImage.widthAnchor.constraint(equalToConstant: 128),
+            userAvatarImage.heightAnchor.constraint(equalToConstant: 180),
+            userAvatarImage.widthAnchor.constraint(equalToConstant: 180),
             
-            infoStackView.topAnchor.constraint(equalTo: userAvatarImage.bottomAnchor, constant: 20),
+            infoStackView.topAnchor.constraint(equalTo: userAvatarImage.bottomAnchor, constant: 10),
             infoStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             infoStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
         ])
     }
     
     private func setupNavBar() {
-        title = "Profile"
-        navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.black]
+        navigationItem.title = "Profile"
+        navigationItem.largeTitleDisplayMode = .automatic
+        navigationController?.navigationBar.prefersLargeTitles = true
+        navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
+        navigationController?.navigationBar.largeTitleTextAttributes = [ NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 54)]
+        navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: Colors.primaryTextOnSurfaceColor ?? .white]
         navigationController?.navigationBar.topItem?.rightBarButtonItem = UIBarButtonItem(customView: changeButton)
     }
     
     private func setupStackView() {
-        view.backgroundColor = .white
+        view.backgroundColor = Colors.primaryBackGroundColor
         infoStackView.axis = .vertical
         infoStackView.distribution = .fillEqually
         infoStackView.alignment = .fill
@@ -83,12 +88,12 @@ class ProfileInfoViewController: UIViewController {
     
     private func setupImageView() {
         userAvatarImage.contentMode = .scaleAspectFill
-        userAvatarImage.layer.cornerRadius = 10
+        userAvatarImage.layer.cornerRadius = 90
         userAvatarImage.layer.masksToBounds = true
     }
     
     private func setupButton() {
-        changeButton.setImage(UIImage(systemName: "info.circle"), for: [])
+        changeButton.setImage(UIImage(systemName: "pencil.line"), for: [])
         changeButton.contentMode = .scaleAspectFit
         changeButton.tintColor = .systemRed
         changeButton.addTarget(self, action: #selector(changeProfile), for: .touchUpInside)
@@ -97,7 +102,12 @@ class ProfileInfoViewController: UIViewController {
     func configureSelf(profile: Profile) {
         nameView.nameText.text = profile.name
         emailView.emailText.text = profile.email
-        userAvatarImage.image = profile.photo
+        if let imageData = UserDefaults.standard.object(forKey: "photo") as? Data {
+            profile.photo = UIImage(data: imageData)
+            userAvatarImage.image = profile.photo
+        } else {
+            userAvatarImage.image = profile.photo
+        }
     }
 }
     
@@ -115,6 +125,9 @@ extension ProfileInfoViewController: ProfileViewDelegate {
     func changingInfo(profile: Profile) {
         nameView.nameText.text = UserDefaults.standard.string(forKey: "name")
         emailView.emailText.text = UserDefaults.standard.string(forKey: "email")
+        if let imageData = UserDefaults.standard.object(forKey: "photo") as? Data {
+            userAvatarImage.image = UIImage(data: imageData)
+        }
     }
 }
 

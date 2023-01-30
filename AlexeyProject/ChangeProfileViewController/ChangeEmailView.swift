@@ -52,9 +52,9 @@ class ChangeEmailView: UIView {
     }
     
     private func setupLabel() {
-        emailLabel.text = "text your email"
-        emailLabel.textColor = .black
-        emailLabel.font = UIFont.systemFont(ofSize: 16, weight: .medium)
+        emailLabel.text = "Text your email"
+        emailLabel.textColor = Colors.primaryTextOnSurfaceColor
+        emailLabel.font = UIFont.systemFont(ofSize: 20, weight: .medium)
         emailLabel.textAlignment = .left
     }
     
@@ -63,7 +63,7 @@ class ChangeEmailView: UIView {
         emailTextField.textAlignment = .left
         emailTextField.borderStyle = UITextField.BorderStyle.roundedRect
         emailTextField.contentVerticalAlignment = .center
-        emailTextField.textColor = .blue
+        emailTextField.textColor = Colors.accentSurfaceColor
         emailTextField.font = UIFont.systemFont(ofSize: 30)
     }
 }

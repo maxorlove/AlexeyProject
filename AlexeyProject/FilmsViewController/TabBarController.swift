@@ -10,10 +10,10 @@ import UIKit
 class TabBarController: UITabBarController, UITabBarControllerDelegate {
     
     //MARK: - Properties
-    let filmsTabBarItem = UITabBarItem()
-    let filmsViewController = UINavigationController(rootViewController: FilmsViewController())
-    let profileViewController = UINavigationController(rootViewController: ProfileInfoViewController())
-    let profileBarItem = UITabBarItem()
+   private let filmsTabBarItem = UITabBarItem()
+   private let filmsViewController = UINavigationController(rootViewController: FilmsGridViewController())
+   private let profileViewController = UINavigationController(rootViewController: ProfileInfoViewController())
+   private let profileBarItem = UITabBarItem()
    
     //MARK: - Lifecycle
     override func viewDidLoad() {
@@ -35,14 +35,17 @@ class TabBarController: UITabBarController, UITabBarControllerDelegate {
     }
     
     private func setupTabBar() {
-        tabBar.backgroundColor = .black
-        tabBar.tintColor = .white
-        tabBar.unselectedItemTintColor = .gray
+        tabBar.backgroundColor = Colors.primaryBackGroundColor
+        tabBar.tintColor = Colors.accentSurfaceColor
+        tabBar.unselectedItemTintColor = Colors.primaryTextOnBackGroundColor
+        tabBar.itemPositioning = .fill
         
-        filmsTabBarItem.title = "Films"
-        filmsTabBarItem.image = UIImage(systemName: "film.fill")
+        filmsTabBarItem.title = ""
+        filmsTabBarItem.image = UIImage(named: "icoCompass")
+        filmsTabBarItem.imageInsets = UIEdgeInsets(top: 0, left: 96.25, bottom: 0, right: 78)
         
-        profileBarItem.title = "Profile"
-        profileBarItem.image = UIImage(systemName: "person.fill")
+        profileBarItem.title = ""
+        profileBarItem.image = UIImage(named: "shape")
+        profileBarItem.imageInsets = UIEdgeInsets(top: 0, left: 78, bottom: 0, right: 96.25)
     }
 }

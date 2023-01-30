@@ -52,9 +52,9 @@ class ChangeInfoView: UIView {
     }
     
     private func setupLabel() {
-        nameLabel.text = "text your name"
-        nameLabel.textColor = .black
-        nameLabel.font = UIFont.systemFont(ofSize: 16, weight: .medium)
+        nameLabel.text = "Text your name"
+        nameLabel.textColor = Colors.primaryTextOnSurfaceColor
+        nameLabel.font = UIFont.systemFont(ofSize: 20, weight: .medium)
         nameLabel.textAlignment = .left
     }
     
@@ -63,7 +63,7 @@ class ChangeInfoView: UIView {
         nameTextField.textAlignment = .left
         nameTextField.borderStyle = UITextField.BorderStyle.roundedRect
         nameTextField.contentVerticalAlignment = .center
-        nameTextField.textColor = .blue
+        nameTextField.textColor = Colors.accentSurfaceColor
         nameTextField.font = UIFont.systemFont(ofSize: 30)
     }
 }
