@@ -14,7 +14,7 @@ class ChangeProfileInfoViewController: UIViewController {
    private let nameView = ChangeInfoView()
    private let emailView = ChangeEmailView()
 
-   private let changeAvatarImage = UIButton()
+   private let changeAvatarImageButton = UIButton()
    private let saveButton = UIButton()
     
     var profile: Profile?
@@ -47,29 +47,29 @@ class ChangeProfileInfoViewController: UIViewController {
         emailView.emailTextField.text = UserDefaults.standard.string(forKey: "email")
         
         if let imageData = UserDefaults.standard.object(forKey: "photo") as? Data {
-            changeAvatarImage.setImage(UIImage(data: imageData), for: [])
+            changeAvatarImageButton.setImage(UIImage(data: imageData), for: [])
         } else {
-            changeAvatarImage.setImage(profile?.photo, for: [])
+            changeAvatarImageButton.setImage(profile?.photo, for: [])
         }
     }
     
     private func addSubviews() {
         view.addSubview(infoChangeStackView)
-        view.addSubview(changeAvatarImage)
+        view.addSubview(changeAvatarImageButton)
         view.addSubview(saveButton)
     }
     
     private func setupConstraints() {
         infoChangeStackView.translatesAutoresizingMaskIntoConstraints = false
-        changeAvatarImage.translatesAutoresizingMaskIntoConstraints = false
+        changeAvatarImageButton.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-            changeAvatarImage.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
-            changeAvatarImage.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            changeAvatarImage.heightAnchor.constraint(equalToConstant: 180),
-            changeAvatarImage.widthAnchor.constraint(equalToConstant: 180),
+            changeAvatarImageButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
+            changeAvatarImageButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            changeAvatarImageButton.heightAnchor.constraint(equalToConstant: 180),
+            changeAvatarImageButton.widthAnchor.constraint(equalToConstant: 180),
             
-            infoChangeStackView.topAnchor.constraint(equalTo: changeAvatarImage.bottomAnchor, constant: 10),
+            infoChangeStackView.topAnchor.constraint(equalTo: changeAvatarImageButton.bottomAnchor, constant: 10),
             infoChangeStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             infoChangeStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
         ])
@@ -96,10 +96,10 @@ class ChangeProfileInfoViewController: UIViewController {
     }
         
     private func setupImageView() {
-        changeAvatarImage.contentMode = .scaleAspectFill
-        changeAvatarImage.layer.cornerRadius = 90
-        changeAvatarImage.layer.masksToBounds = true
-        changeAvatarImage.addTarget(self, action: #selector(changeImage), for: .touchUpInside)
+        changeAvatarImageButton.contentMode = .scaleAspectFill
+        changeAvatarImageButton.layer.cornerRadius = 90
+        changeAvatarImageButton.layer.masksToBounds = true
+        changeAvatarImageButton.addTarget(self, action: #selector(changeImage), for: .touchUpInside)
     }
     
     private func setupButton() {
@@ -185,7 +185,7 @@ class ChangeProfileInfoViewController: UIViewController {
             }
         }
         
-        if(shouldMoveViewUp) {
+        if shouldMoveViewUp {
             self.view.frame.origin.y = 0 - 100
         }
     }
@@ -199,13 +199,13 @@ class ChangeProfileInfoViewController: UIViewController {
 extension ChangeProfileInfoViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         if let image = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
-            let dataImage = image.pngData()! as NSData
+            let dataImage = image.pngData() as? NSData
             UserDefaults.standard.set(dataImage, forKey: "photo")            
-            self.changeAvatarImage.setImage(image, for: [])
+            self.changeAvatarImageButton.setImage(image, for: [])
         } else if let image = info[.editedImage] as? UIImage {
-            let dataImage = image.pngData()! as NSData
+            let dataImage = image.pngData() as? NSData
             UserDefaults.standard.set(dataImage, forKey: "photo")
-            self.changeAvatarImage.setImage(image, for: [])
+            self.changeAvatarImageButton.setImage(image, for: [])
         }
         self.dismiss(animated: true, completion: nil)
     }

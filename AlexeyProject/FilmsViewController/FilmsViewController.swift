@@ -194,6 +194,7 @@ class FilmsGridViewController: UIViewController {
             guard self != nil else {
                 return
             }
+            self?.refreshDataSource()
             self?.selectedSorting = SelectedSortingFilms.popular
             if self?.selectedSorting == SelectedSortingFilms.popular {
                 self?.loadData(for: self?.currentPage ?? 1)
@@ -204,6 +205,7 @@ class FilmsGridViewController: UIViewController {
             guard let self = self else {
                 return
             }
+            self.refreshDataSource()
             self.selectedSorting = SelectedSortingFilms.latest
             if self.selectedSorting == SelectedSortingFilms.latest {
                 self.loadData(for: self.currentPage)
@@ -214,6 +216,7 @@ class FilmsGridViewController: UIViewController {
             guard let self = self else {
                 return
             }
+            self.refreshDataSource()
             self.selectedSorting = SelectedSortingFilms.upcomimng
             if self.selectedSorting == SelectedSortingFilms.upcomimng {
                 self.loadData(for: self.currentPage)
@@ -237,7 +240,6 @@ class FilmsGridViewController: UIViewController {
 
     @objc func sortingFilms(sender: UIButton) {
         sortAlert()
-        refreshDataSource()
     }
     
     @objc func switchCollectionOfFilms(sender: UIButton) {

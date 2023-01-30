@@ -62,10 +62,10 @@ final class FilmGridCollectionViewCell: UICollectionViewCell {
             posterImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
             
             customBlurEffectView.leadingAnchor.constraint(equalTo: posterImageView.leadingAnchor,constant: 4),
-            customBlurEffectView.trailingAnchor.constraint(equalTo: posterImageView.trailingAnchor,constant: -4.5),
+            customBlurEffectView.trailingAnchor.constraint(equalTo: posterImageView.trailingAnchor,constant: -4),
             customBlurEffectView.bottomAnchor.constraint(equalTo: posterImageView.bottomAnchor, constant: -4),
             customBlurEffectView.heightAnchor.constraint(equalToConstant: 64),
-            customBlurEffectView.widthAnchor.constraint(equalToConstant: 176.5),
+            customBlurEffectView.widthAnchor.constraint(equalToConstant: 177),
             
             titleLabel.topAnchor.constraint(equalTo: customBlurEffectView.topAnchor, constant: 8),
             titleLabel.leadingAnchor.constraint(equalTo: customBlurEffectView.leadingAnchor, constant: 12),
@@ -80,9 +80,9 @@ final class FilmGridCollectionViewCell: UICollectionViewCell {
             voteLabel.trailingAnchor.constraint(equalTo: customBlurEffectViewForVote.trailingAnchor, constant: -10),
             voteLabel.bottomAnchor.constraint(equalTo: customBlurEffectViewForVote.bottomAnchor, constant: -7),
             
-            ratingImageView.leadingAnchor.constraint(equalTo: customBlurEffectViewForVote.leadingAnchor, constant: 9.67),
-            ratingImageView.heightAnchor.constraint(equalToConstant: 16.67),
-            ratingImageView.widthAnchor.constraint(equalToConstant: 16.67),
+            ratingImageView.leadingAnchor.constraint(equalTo: customBlurEffectViewForVote.leadingAnchor, constant: 10),
+            ratingImageView.heightAnchor.constraint(equalToConstant: 17),
+            ratingImageView.widthAnchor.constraint(equalToConstant: 17),
             ratingImageView.centerYAnchor.constraint(equalTo: voteLabel.centerYAnchor)
         ])
     }
@@ -110,8 +110,8 @@ final class FilmGridCollectionViewCell: UICollectionViewCell {
     }
     
     func configure(with model: Film) {
-        titleLabel.text = "\(model.title)"
-        releaseLabel.text = "\(model.releaseDate)"
+        titleLabel.text = model.title
+        releaseLabel.text = model.releaseDate
         voteLabel.text = "\(model.voteAverage)"
         let url = URL(string: baseImageUrl.baseImageURL + model.poster)
         posterImageView.sd_setImage(with: url)

@@ -10,7 +10,7 @@ import UIKit
 class CompanyView: UIView {
     
     //MARK: - Properties
-    var companyName = UILabel()
+    var companyNameLabel = UILabel()
     var companyImageView = UIImageView()
     
     // MARK: - LifeCycle
@@ -33,12 +33,12 @@ class CompanyView: UIView {
     }
     
     private func addSubviews() {
-        addSubview(companyName)
+        addSubview(companyNameLabel)
         addSubview(companyImageView)
     }
     
     private func setupConstraints() {
-        companyName.translatesAutoresizingMaskIntoConstraints = false
+        companyNameLabel.translatesAutoresizingMaskIntoConstraints = false
         companyImageView.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
@@ -47,22 +47,22 @@ class CompanyView: UIView {
             companyImageView.heightAnchor.constraint(equalToConstant: 20),
             companyImageView.widthAnchor.constraint(equalToConstant: 20),
             
-            companyName.leadingAnchor.constraint(equalTo: companyImageView.trailingAnchor, constant: 8),
-            companyName.trailingAnchor.constraint(equalTo: trailingAnchor),
-            companyName.centerYAnchor.constraint(equalTo: companyImageView.centerYAnchor)
+            companyNameLabel.leadingAnchor.constraint(equalTo: companyImageView.trailingAnchor, constant: 8),
+            companyNameLabel.trailingAnchor.constraint(equalTo: trailingAnchor),
+            companyNameLabel.centerYAnchor.constraint(equalTo: companyImageView.centerYAnchor)
         ])
     }
     
     private func setupName() {
-        companyName.font = UIFont.systemFont(ofSize: 15, weight: .light)
-        companyName.textColor = Colors.primaryTextOnSurfaceColor
-        companyName.textAlignment = .left
-        companyName.numberOfLines = 0
+        companyNameLabel.font = UIFont.systemFont(ofSize: 15, weight: .light)
+        companyNameLabel.textColor = Colors.primaryTextOnSurfaceColor
+        companyNameLabel.textAlignment = .left
+        companyNameLabel.numberOfLines = 0
     }
     
     private func setupImage() {
-        companyName.contentMode = .scaleAspectFill
-        companyName.layer.masksToBounds = true
+        companyNameLabel.contentMode = .scaleAspectFill
+        companyNameLabel.layer.masksToBounds = true
     }
 }
 

@@ -63,11 +63,11 @@ class OneFilmCollectionViewCell: UICollectionViewCell {
             posterImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8),
             
             titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
-            titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16.5),
+            titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -17),
             titleLabel.leadingAnchor.constraint(equalTo: posterImageView.trailingAnchor, constant: 24),
             
             releaseLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 8),
-            releaseLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16.5),
+            releaseLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -17),
             releaseLabel.leadingAnchor.constraint(equalTo: posterImageView.trailingAnchor, constant: 24),
             
             customBlurEffectView.trailingAnchor.constraint(equalTo: posterImageView.trailingAnchor, constant: -4),
@@ -79,9 +79,9 @@ class OneFilmCollectionViewCell: UICollectionViewCell {
             voteLabel.trailingAnchor.constraint(equalTo: customBlurEffectView.trailingAnchor, constant: -10),
             voteLabel.bottomAnchor.constraint(equalTo: customBlurEffectView.bottomAnchor, constant: -7),
             
-            ratingImageView.leadingAnchor.constraint(equalTo: customBlurEffectView.leadingAnchor, constant: 9.76),
-            ratingImageView.heightAnchor.constraint(equalToConstant: 16.67),
-            ratingImageView.widthAnchor.constraint(equalToConstant: 16.67),
+            ratingImageView.leadingAnchor.constraint(equalTo: customBlurEffectView.leadingAnchor, constant: 10),
+            ratingImageView.heightAnchor.constraint(equalToConstant: 17),
+            ratingImageView.widthAnchor.constraint(equalToConstant: 17),
             ratingImageView.centerYAnchor.constraint(equalTo: voteLabel.centerYAnchor)
         ])
     }
@@ -107,8 +107,8 @@ class OneFilmCollectionViewCell: UICollectionViewCell {
     }
     
     func configure(with model: Film) {
-        titleLabel.text = "\(model.title)"
-        releaseLabel.text = "\(model.releaseDate)"
+        titleLabel.text = model.title
+        releaseLabel.text = model.releaseDate
         voteLabel.text = "\(model.voteAverage)"
         let url = URL(string: baseImageUrl.baseImageURL + model.poster)
         posterImageView.sd_setImage(with: url)

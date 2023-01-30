@@ -12,12 +12,12 @@ class FilmViewController: UIViewController {
     // MARK: - Properties
     private let filmScrollView = UIScrollView()
     private let filmTitle = UILabel()
-    private let releaseDate = UILabel()
-    private let overview = UILabel()
-    private let runtime = UILabel()
-    private let budget = UILabel()
-    private let revenue = UILabel()
-    private let countryName = UILabel()
+    private let releaseDateLabel = UILabel()
+    private let overviewLabel = UILabel()
+    private let runtimeLabel = UILabel()
+    private let budgetLabel = UILabel()
+    private let revenueLabel = UILabel()
+    private let countryNameLabel = UILabel()
     private let scrollViewContainer = UIStackView()
     private let companiesStackView = UIStackView()
     private let countriesStackView = UIStackView()
@@ -76,11 +76,11 @@ class FilmViewController: UIViewController {
         scrollViewContainer.addArrangedSubview(posterView)
         scrollViewContainer.addArrangedSubview(infoBackGroundView)
         scrollViewContainer.addArrangedSubview(filmTitle)
-        scrollViewContainer.addArrangedSubview(releaseDate)
-        scrollViewContainer.addArrangedSubview(overview)
-        scrollViewContainer.addArrangedSubview(runtime)
-        scrollViewContainer.addArrangedSubview(budget)
-        scrollViewContainer.addArrangedSubview(revenue)
+        scrollViewContainer.addArrangedSubview(releaseDateLabel)
+        scrollViewContainer.addArrangedSubview(overviewLabel)
+        scrollViewContainer.addArrangedSubview(runtimeLabel)
+        scrollViewContainer.addArrangedSubview(budgetLabel)
+        scrollViewContainer.addArrangedSubview(revenueLabel)
         scrollViewContainer.addArrangedSubview(companiesStackView)
         scrollViewContainer.addArrangedSubview(countriesStackView)
     }
@@ -88,17 +88,6 @@ class FilmViewController: UIViewController {
     private func setupConstraints() {
         filmScrollView.translatesAutoresizingMaskIntoConstraints = false
         scrollViewContainer.translatesAutoresizingMaskIntoConstraints = false
-        posterView.translatesAutoresizingMaskIntoConstraints = false
-        infoBackGroundView.translatesAutoresizingMaskIntoConstraints = false
-        filmTitle.translatesAutoresizingMaskIntoConstraints = false
-        releaseDate.translatesAutoresizingMaskIntoConstraints = false
-        overview.translatesAutoresizingMaskIntoConstraints = false
-        runtime.translatesAutoresizingMaskIntoConstraints = false
-        budget.translatesAutoresizingMaskIntoConstraints = false
-        revenue.translatesAutoresizingMaskIntoConstraints = false
-        companiesStackView.translatesAutoresizingMaskIntoConstraints = false
-        countriesStackView.translatesAutoresizingMaskIntoConstraints = false
-        countryName.translatesAutoresizingMaskIntoConstraints = false
         activityIndicator.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
@@ -127,31 +116,22 @@ class FilmViewController: UIViewController {
             filmTitle.leadingAnchor.constraint(equalTo: scrollViewContainer.leadingAnchor, constant: 16),
             filmTitle.trailingAnchor.constraint(equalTo: scrollViewContainer.trailingAnchor, constant: -16),
 
-            releaseDate.topAnchor.constraint(equalTo: filmTitle.bottomAnchor, constant: 8),
-            releaseDate.leadingAnchor.constraint(equalTo: scrollViewContainer.leadingAnchor, constant: 16),
-            releaseDate.trailingAnchor.constraint(equalTo: scrollViewContainer.trailingAnchor, constant: -16),
-            releaseDate.heightAnchor.constraint(equalToConstant: 20),
+            releaseDateLabel.leadingAnchor.constraint(equalTo: scrollViewContainer.leadingAnchor, constant: 16),
+            releaseDateLabel.trailingAnchor.constraint(equalTo: scrollViewContainer.trailingAnchor, constant: -16),
 
-            overview.topAnchor.constraint(equalTo: releaseDate.bottomAnchor, constant: 16),
-            overview.leadingAnchor.constraint(equalTo: scrollViewContainer.leadingAnchor,constant: 16),
-            overview.trailingAnchor.constraint(equalTo: scrollViewContainer.trailingAnchor,constant: -16),
+            overviewLabel.leadingAnchor.constraint(equalTo: scrollViewContainer.leadingAnchor,constant: 16),
+            overviewLabel.trailingAnchor.constraint(equalTo: scrollViewContainer.trailingAnchor,constant: -16),
 
-            runtime.topAnchor.constraint(equalTo: overview.bottomAnchor, constant: 8),
-            runtime.leadingAnchor.constraint(equalTo: scrollViewContainer.leadingAnchor, constant: 16),
-            runtime.trailingAnchor.constraint(equalTo: scrollViewContainer.trailingAnchor, constant: -16),
-            runtime.heightAnchor.constraint(equalToConstant: 20),
+            runtimeLabel.leadingAnchor.constraint(equalTo: scrollViewContainer.leadingAnchor, constant: 16),
+            runtimeLabel.trailingAnchor.constraint(equalTo: scrollViewContainer.trailingAnchor, constant: -16),
+
+            budgetLabel.leadingAnchor.constraint(equalTo: scrollViewContainer.leadingAnchor, constant: 16),
+            budgetLabel.trailingAnchor.constraint(equalTo: scrollViewContainer.trailingAnchor, constant: -16),
+
+            revenueLabel.leadingAnchor.constraint(equalTo: scrollViewContainer.leadingAnchor, constant: 16),
+            revenueLabel.trailingAnchor.constraint(equalTo: scrollViewContainer.trailingAnchor, constant: -16),
             
-            budget.topAnchor.constraint(equalTo: runtime.bottomAnchor, constant: 8),
-            budget.leadingAnchor.constraint(equalTo: scrollViewContainer.leadingAnchor, constant: 16),
-            budget.trailingAnchor.constraint(equalTo: scrollViewContainer.trailingAnchor, constant: -16),
-            budget.heightAnchor.constraint(equalToConstant: 20),
-
-            revenue.topAnchor.constraint(equalTo: budget.bottomAnchor, constant: 8),
-            revenue.leadingAnchor.constraint(equalTo: scrollViewContainer.leadingAnchor, constant: 16),
-            revenue.trailingAnchor.constraint(equalTo: scrollViewContainer.trailingAnchor, constant: -16),
-            revenue.heightAnchor.constraint(equalToConstant: 20),
-            
-            companiesStackView.topAnchor.constraint(equalTo: revenue.bottomAnchor, constant: 20),
+            companiesStackView.topAnchor.constraint(equalTo: revenueLabel.bottomAnchor, constant: 20),
             companiesStackView.leadingAnchor.constraint(equalTo: scrollViewContainer.leadingAnchor, constant: 16),
             companiesStackView.trailingAnchor.constraint(equalTo: scrollViewContainer.trailingAnchor, constant: -16),
             
@@ -176,7 +156,7 @@ class FilmViewController: UIViewController {
         scrollViewContainer.axis = .vertical
         scrollViewContainer.distribution = .fill
         scrollViewContainer.spacing = 8
-        scrollViewContainer.alignment = .center
+        scrollViewContainer.alignment = .leading
         
         companiesStackView.axis = .vertical
         companiesStackView.spacing = 30
@@ -204,48 +184,48 @@ class FilmViewController: UIViewController {
         filmTitle.textAlignment = .left
         filmTitle.numberOfLines = 0
 
-        releaseDate.font = UIFont.systemFont(ofSize: 17, weight: .light)
-        releaseDate.textColor = Colors.secondaryTextOnSurfaceColor
-        releaseDate.textAlignment = .left
-        releaseDate.numberOfLines = 0
+        releaseDateLabel.font = UIFont.systemFont(ofSize: 17, weight: .light)
+        releaseDateLabel.textColor = Colors.secondaryTextOnSurfaceColor
+        releaseDateLabel.textAlignment = .left
+        releaseDateLabel.numberOfLines = 0
 
-        overview.font = UIFont.systemFont(ofSize: 20, weight: .light)
-        overview.textColor = Colors.primaryTextOnSurfaceColor
-        overview.textAlignment = .left
-        overview.numberOfLines = 0
+        overviewLabel.font = UIFont.systemFont(ofSize: 20, weight: .light)
+        overviewLabel.textColor = Colors.primaryTextOnSurfaceColor
+        overviewLabel.textAlignment = .left
+        overviewLabel.numberOfLines = 0
         
-        runtime.font = UIFont.systemFont(ofSize: 15, weight: .light)
-        runtime.textColor = Colors.secondaryTextOnSurfaceColor
-        runtime.textAlignment = .left
-        runtime.numberOfLines = 0
+        runtimeLabel.font = UIFont.systemFont(ofSize: 15, weight: .light)
+        runtimeLabel.textColor = Colors.secondaryTextOnSurfaceColor
+        runtimeLabel.textAlignment = .left
+        runtimeLabel.numberOfLines = 0
 
-        budget.font = UIFont.systemFont(ofSize: 15, weight: .light)
-        budget.textColor = Colors.secondaryTextOnSurfaceColor
-        budget.textAlignment = .left
-        budget.numberOfLines = 0
+        budgetLabel.font = UIFont.systemFont(ofSize: 15, weight: .light)
+        budgetLabel.textColor = Colors.secondaryTextOnSurfaceColor
+        budgetLabel.textAlignment = .left
+        budgetLabel.numberOfLines = 0
 
-        revenue.font = UIFont.systemFont(ofSize: 15, weight: .light)
-        revenue.textColor = Colors.secondaryTextOnSurfaceColor
-        revenue.textAlignment = .left
-        revenue.numberOfLines = 0
+        revenueLabel.font = UIFont.systemFont(ofSize: 15, weight: .light)
+        revenueLabel.textColor = Colors.secondaryTextOnSurfaceColor
+        revenueLabel.textAlignment = .left
+        revenueLabel.numberOfLines = 0
         
-        countryName.font = UIFont.systemFont(ofSize: 15, weight: .light)
-        countryName.textColor = Colors.secondaryTextOnSurfaceColor
-        countryName.textAlignment = .left
-        countryName.numberOfLines = 0
+        countryNameLabel.font = UIFont.systemFont(ofSize: 15, weight: .light)
+        countryNameLabel.textColor = Colors.secondaryTextOnSurfaceColor
+        countryNameLabel.textAlignment = .left
+        countryNameLabel.numberOfLines = 0
     }
     
     private func configureSelf(with filmData: FilmResponse) {
         filmTitle.text = filmData.title
-        releaseDate.text = filmData.releaseDate
-        overview.text = filmData.overview
+        releaseDateLabel.text = filmData.releaseDate
+        overviewLabel.text = filmData.overview
         let posterUrl = URL(string: baseUrl.baseImageURL + filmData.poster)
         posterView.posterImageView.sd_setImage(with: posterUrl, completed: nil)
         posterView.posterBackGroundImageView.sd_setImage(with: posterUrl, completed: nil)
-        runtime.text = "run time: \(filmData.runtime) min."
+        runtimeLabel.text = "run time: \(filmData.runtime) min."
         posterView.voteLabel.text = String(filmData.voteAverage)
-        budget.text = "Budget: \(filmData.budget) $"
-        revenue.text = "Revenue: \(filmData.revenue) $"
+        budgetLabel.text = "Budget: \(filmData.budget) $"
+        revenueLabel.text = "Revenue: \(filmData.revenue) $"
         
         for company in filmData.productionCompanies {
             let companyView = CompanyView()
@@ -253,12 +233,12 @@ class FilmViewController: UIViewController {
             companiesStackView.addArrangedSubview(companyView)
             let companyUrl = URL(string: baseUrl.baseImageURL + (company.logoPath ?? ""))
             companyView.companyImageView.sd_setImage(with: companyUrl, completed: nil)
-            companyView.companyName.text = company.name
+            companyView.companyNameLabel.text = company.name
         }
         
         for country in filmData.productionCountry {
-            countriesStackView.addArrangedSubview(countryName)
-            countryName.text = "Country: \(country.name)"
+            countriesStackView.addArrangedSubview(countryNameLabel)
+            countryNameLabel.text = "Country: \(country.name)"
         }
     }
 }
