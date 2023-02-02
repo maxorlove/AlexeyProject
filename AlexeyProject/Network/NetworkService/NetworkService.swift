@@ -7,14 +7,16 @@
 
 import Foundation
 
-protocol NetworkServiceFilms {
+protocol FilmsNetworkProtocol {
     func allPopularFilms(page: Int, completion: @escaping(Result<FilmsResponse, ErrorModel>) -> Void) -> URLSessionDataTask
     func allLatestFilms(page: Int, completion: @escaping(Result<FilmsResponse, ErrorModel>) -> Void) -> URLSessionDataTask
     func allUpcomingFilms(page: Int, completion: @escaping(Result<FilmsResponse, ErrorModel>) -> Void) -> URLSessionDataTask
     func film(id: Int, completion: @escaping(Result<FilmResponse, ErrorModel>) -> Void) -> URLSessionDataTask
 }
 
-class NetworkServiceImplForFilms: NetworkServiceFilms {
+final class NetworkService {}
+
+extension NetworkService: FilmsNetworkProtocol {
 
     func allPopularFilms(page: Int, completion: @escaping(Result<FilmsResponse, ErrorModel>) -> Void) -> URLSessionDataTask {
         let request = ServiceManager.shared.sendRequest(request: PopularFilmsRequest(page: page), completion: completion)

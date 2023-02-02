@@ -7,6 +7,11 @@
 
 import UIKit
 import SDWebImage
+
+protocol FilmViewControllerProtocol: AnyObject {
+    
+}
+
 class FilmViewController: UIViewController {
     
     // MARK: - Properties
@@ -26,7 +31,7 @@ class FilmViewController: UIViewController {
     private let activityIndicator = UIActivityIndicatorView(style: .large)
     
     private let baseUrl = ServiceManager()
-    private let networkFilm = NetworkServiceImplForFilms()
+    private let networkFilm = NetworkService()
     private var filmData: FilmResponse?
     
     var film: Film?

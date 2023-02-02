@@ -10,10 +10,10 @@ import UIKit
 class TabBarController: UITabBarController, UITabBarControllerDelegate {
     
     //MARK: - Properties
-   private let filmsTabBarItem = UITabBarItem()
-   private let filmsViewController = UINavigationController(rootViewController: FilmsGridViewController())
-   private let profileViewController = UINavigationController(rootViewController: ProfileInfoViewController())
-   private let profileBarItem = UITabBarItem()
+    private let filmsTabBarItem = UITabBarItem()
+    private let filmsViewController = UINavigationController(rootViewController: FilmsAssembly.build())
+    private let profileViewController = UINavigationController(rootViewController: ProfileAssembly.build())
+    private let profileBarItem = UITabBarItem()
    
     //MARK: - Lifecycle
     override func viewDidLoad() {
