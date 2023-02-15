@@ -14,6 +14,7 @@ enum ErrorKey: String {
 
 class ErrorModel: Error {
 
+    //MARK: - Public Properties
     var messageKey: String
     var message: String {
         return messageKey
@@ -25,6 +26,7 @@ class ErrorModel: Error {
     
 }
 
+//MARK: - ErrorModel
 extension ErrorModel {
 
     static func generalError() -> ErrorModel {

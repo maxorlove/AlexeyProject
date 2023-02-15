@@ -14,7 +14,7 @@ enum RequestHTTPMethod: String {
 
 class RequestModel: NSObject {
 
-    // MARK: - Properties
+    // MARK: - Public Properties
     var path: String {
         return ""
     }
@@ -33,10 +33,10 @@ class RequestModel: NSObject {
 
 }
 
+//MARK: - RequestModel
 extension RequestModel {
-
     func urlRequest() -> URLRequest {
-        var endpoint: String = ServiceManager.shared.baseURL.appending(path)
+        var endpoint: String = NetworkСonstants.baseURL.appending(path)
 
         if !parameters.isEmpty {
             endpoint.append("?")

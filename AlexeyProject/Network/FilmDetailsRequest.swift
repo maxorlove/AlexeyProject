@@ -9,7 +9,7 @@ import Foundation
 
 class FilmDetailsRequest: RequestModel {
     
-
+    //MARK: - Private Methods
     private var apiKey = "22df3e5437e8d86b8c6f7e75ab7f6243"
     private var language = "en-US"
     private var id: Int

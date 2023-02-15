@@ -10,12 +10,15 @@ import Foundation
 struct FilmResponse: Codable {
     let title: String
     let poster: String
-    let overview: String
+    let description: String
     let releaseDate: String
     let voteAverage: Double
     let runtime: Int
     let budget: Int
     let revenue: Int
+    let voteCount: Int
+    let popularity: Double
+    let originalLanguage: String
     
     let productionCompanies: [ProductionCompanies]
     let productionCountry: [ProductionCountry]
@@ -23,7 +26,7 @@ struct FilmResponse: Codable {
     enum CodingKeys: String, CodingKey {
         case title = "title"
         case poster = "poster_path"
-        case overview = "overview"
+        case description = "overview"
         case releaseDate = "release_date"
         case voteAverage = "vote_average"
         case runtime = "runtime"
@@ -31,6 +34,9 @@ struct FilmResponse: Codable {
         case revenue = "revenue"
         case productionCompanies = "production_companies"
         case productionCountry = "production_countries"
+        case voteCount = "vote_count"
+        case popularity = "popularity"
+        case originalLanguage = "original_language"
     }
     
     struct ProductionCompanies: Codable {
