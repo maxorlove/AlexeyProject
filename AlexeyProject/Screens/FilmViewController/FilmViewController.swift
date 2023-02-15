@@ -10,84 +10,83 @@ import SDWebImage
 
 protocol FilmViewControllerProtocol: AnyObject {
     
+    //MARK: - Public Methods
+    func updateView(filmData: FilmResponse)
+    func showActivityIndicator()
+    func showErrorAlert()
+    func didTapButton()
 }
 
 class FilmViewController: UIViewController {
     
-    // MARK: - Properties
+    // MARK: - Private Properties
     private let filmScrollView = UIScrollView()
-    private let filmTitle = UILabel()
-    private let releaseDateLabel = UILabel()
-    private let overviewLabel = UILabel()
-    private let runtimeLabel = UILabel()
-    private let budgetLabel = UILabel()
-    private let revenueLabel = UILabel()
-    private let countryNameLabel = UILabel()
+
     private let scrollViewContainer = UIStackView()
+    private let filmTitleStackView = UIStackView()
+    private let ratingVotePopularityStackView = UIStackView()
+    private let releaseLanguageStackView = UIStackView()
+    private let descriptionStackView = UIStackView()
+    private let runtimeStackView = UIStackView()
+    private let revenueBudgetStackView = UIStackView()
     private let companiesStackView = UIStackView()
     private let countriesStackView = UIStackView()
-    private let posterView = PosterImageView()
+    
+    private let posterImageView = PosterFilmImageView()
+    private let filmTitleView = FilmLabelView()
+    private let ratingView = RatingFilmView()
+    private let voteCountView = VoteCountFilmView()
+    private let popularityView = PopularityFilmView()
+    private let releaseDateView = ReleaseDateFilmView()
+    private let languageFilmView = LanguageFilmView()
+    private let descriptionFilmView = DescriptionFilmView()
+    private let runtimeFilmView = RuntimeFilmView()
+    private let revenueFilmView = RevenueFilmView()
+    private let budgetFilmView = BudgetFilmView()
+    private let countryFilmView = CountryFilmView()
+    private let companyFilmView = CompanyFilmView()
+    
     private let infoBackGroundView = UIView()
     private let activityIndicator = UIActivityIndicatorView(style: .large)
     
-    private let baseUrl = ServiceManager()
-    private let networkFilm = NetworkService()
-    private var filmData: FilmResponse?
-    
-    var film: Film?
+    // MARK: - Public Properties
+    var presenter: FilmPresenterProtocol?
+    var isliked = false
     
     // MARK: - LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        if let film = film {
-            loadData(for: film.id)
-                setup()
-            }
-        if let filmData = filmData {
-            configureSelf(with: filmData)
-        }
+            setup()
+        presenter?.viewDidload()
     }
     
-    // MARK: - Methods
+    // MARK: - Private Methods
     private func setup() {
         addSubviews()
         setupConstraints()
         setupStackView()
-        setupLabels()
+        setupFilmInfoStackViews()
         setupViews()
         setupNavBar()
-        activityIndicator.startAnimating()
-    }
-    
-    private func loadData(for id: Int) {
-        networkFilm.film(id: id) { [weak self] result in
-            switch result {
-            case .success(let responseFilm):
-                DispatchQueue.main.async {
-                    self?.activityIndicator.stopAnimating()
-                    self?.filmData = responseFilm
-                    self?.configureSelf(with: responseFilm)
-                }
-            case .failure(let error):
-                error.localizedDescription
-            }
-        }
     }
     
     private func addSubviews() {
         view.addSubview(filmScrollView)
         view.addSubview(activityIndicator)
         filmScrollView.addSubview(scrollViewContainer)
-        scrollViewContainer.addArrangedSubview(posterView)
+        scrollViewContainer.addArrangedSubview(posterImageView)
         scrollViewContainer.addArrangedSubview(infoBackGroundView)
-        scrollViewContainer.addArrangedSubview(filmTitle)
-        scrollViewContainer.addArrangedSubview(releaseDateLabel)
-        scrollViewContainer.addArrangedSubview(overviewLabel)
-        scrollViewContainer.addArrangedSubview(runtimeLabel)
-        scrollViewContainer.addArrangedSubview(budgetLabel)
-        scrollViewContainer.addArrangedSubview(revenueLabel)
-        scrollViewContainer.addArrangedSubview(companiesStackView)
+        scrollViewContainer.addArrangedSubview(filmTitleStackView)
+        scrollViewContainer.addArrangedSubview(filmTitleView)
+        scrollViewContainer.addArrangedSubview(ratingVotePopularityStackView)
+        scrollViewContainer.addArrangedSubview(releaseLanguageStackView)
+        scrollViewContainer.addArrangedSubview(descriptionStackView)
+        scrollViewContainer.addArrangedSubview(runtimeStackView)
+        scrollViewContainer.addArrangedSubview(revenueBudgetStackView)
+        scrollViewContainer.addArrangedSubview(budgetFilmView)
+        scrollViewContainer.addArrangedSubview(revenueFilmView)
         scrollViewContainer.addArrangedSubview(countriesStackView)
+        scrollViewContainer.addArrangedSubview(companiesStackView)
     }
     
     private func setupConstraints() {
@@ -107,43 +106,46 @@ class FilmViewController: UIViewController {
             scrollViewContainer.trailingAnchor.constraint(equalTo: filmScrollView.trailingAnchor),
             scrollViewContainer.bottomAnchor.constraint(equalTo: filmScrollView.bottomAnchor),
             
-            posterView.topAnchor.constraint(equalTo: scrollViewContainer.topAnchor),
-            posterView.leadingAnchor.constraint(equalTo: scrollViewContainer.leadingAnchor),
-            posterView.trailingAnchor.constraint(equalTo: scrollViewContainer.trailingAnchor),
-            posterView.heightAnchor.constraint(equalToConstant: 589),
+            posterImageView.topAnchor.constraint(equalTo: scrollViewContainer.topAnchor),
+            posterImageView.leadingAnchor.constraint(equalTo: scrollViewContainer.leadingAnchor, constant: 8),
+            posterImageView.trailingAnchor.constraint(equalTo: scrollViewContainer.trailingAnchor, constant: -8),
+            posterImageView.heightAnchor.constraint(equalToConstant: 464),
             
-            infoBackGroundView.topAnchor.constraint(equalTo: posterView.bottomAnchor, constant: -96),
+            infoBackGroundView.topAnchor.constraint(equalTo: posterImageView.bottomAnchor, constant: -56),
             infoBackGroundView.leadingAnchor.constraint(equalTo: scrollViewContainer.leadingAnchor),
             infoBackGroundView.trailingAnchor.constraint(equalTo: scrollViewContainer.trailingAnchor),
-            infoBackGroundView.bottomAnchor.constraint(equalTo: posterView.bottomAnchor, constant: 4),
+            infoBackGroundView.bottomAnchor.constraint(equalTo: posterImageView.bottomAnchor),
 
-            filmTitle.topAnchor.constraint(equalTo: infoBackGroundView.topAnchor, constant: 24),
-            filmTitle.leadingAnchor.constraint(equalTo: scrollViewContainer.leadingAnchor, constant: 16),
-            filmTitle.trailingAnchor.constraint(equalTo: scrollViewContainer.trailingAnchor, constant: -16),
-
-            releaseDateLabel.leadingAnchor.constraint(equalTo: scrollViewContainer.leadingAnchor, constant: 16),
-            releaseDateLabel.trailingAnchor.constraint(equalTo: scrollViewContainer.trailingAnchor, constant: -16),
-
-            overviewLabel.leadingAnchor.constraint(equalTo: scrollViewContainer.leadingAnchor,constant: 16),
-            overviewLabel.trailingAnchor.constraint(equalTo: scrollViewContainer.trailingAnchor,constant: -16),
-
-            runtimeLabel.leadingAnchor.constraint(equalTo: scrollViewContainer.leadingAnchor, constant: 16),
-            runtimeLabel.trailingAnchor.constraint(equalTo: scrollViewContainer.trailingAnchor, constant: -16),
-
-            budgetLabel.leadingAnchor.constraint(equalTo: scrollViewContainer.leadingAnchor, constant: 16),
-            budgetLabel.trailingAnchor.constraint(equalTo: scrollViewContainer.trailingAnchor, constant: -16),
-
-            revenueLabel.leadingAnchor.constraint(equalTo: scrollViewContainer.leadingAnchor, constant: 16),
-            revenueLabel.trailingAnchor.constraint(equalTo: scrollViewContainer.trailingAnchor, constant: -16),
+            filmTitleStackView.topAnchor.constraint(equalTo: infoBackGroundView.topAnchor, constant: 24),
+            filmTitleStackView.leadingAnchor.constraint(equalTo: scrollViewContainer.leadingAnchor, constant: 8),
+            filmTitleStackView.trailingAnchor.constraint(equalTo: scrollViewContainer.trailingAnchor, constant: -8),
+            filmTitleStackView.heightAnchor.constraint(equalToConstant: 104),
             
-            companiesStackView.topAnchor.constraint(equalTo: revenueLabel.bottomAnchor, constant: 20),
-            companiesStackView.leadingAnchor.constraint(equalTo: scrollViewContainer.leadingAnchor, constant: 16),
-            companiesStackView.trailingAnchor.constraint(equalTo: scrollViewContainer.trailingAnchor, constant: -16),
+//            ratingVotePopularityStackView.topAnchor.constraint(equalTo: filmTitleView.bottomAnchor,constant: 8),
+            ratingVotePopularityStackView.leadingAnchor.constraint(equalTo: scrollViewContainer.leadingAnchor, constant: 8),
+            ratingVotePopularityStackView.trailingAnchor.constraint(equalTo: scrollViewContainer.trailingAnchor, constant: -8),
+            ratingVotePopularityStackView.heightAnchor.constraint(equalToConstant: 104),
+
+            releaseLanguageStackView.leadingAnchor.constraint(equalTo: scrollViewContainer.leadingAnchor, constant: 8),
+            releaseLanguageStackView.trailingAnchor.constraint(equalTo: scrollViewContainer.trailingAnchor, constant: -8),
+            releaseLanguageStackView.heightAnchor.constraint(equalToConstant: 78),
+
+            descriptionStackView.leadingAnchor.constraint(equalTo: scrollViewContainer.leadingAnchor,constant: 8),
+            descriptionStackView.trailingAnchor.constraint(equalTo: scrollViewContainer.trailingAnchor,constant: -8),
+
+            runtimeStackView.leadingAnchor.constraint(equalTo: scrollViewContainer.leadingAnchor, constant: 8),
+            runtimeStackView.trailingAnchor.constraint(equalTo: scrollViewContainer.trailingAnchor, constant: -8),
+            runtimeStackView.heightAnchor.constraint(equalToConstant: 78),
+
+            revenueBudgetStackView.leadingAnchor.constraint(equalTo: scrollViewContainer.leadingAnchor, constant: 8),
+            revenueBudgetStackView.trailingAnchor.constraint(equalTo: scrollViewContainer.trailingAnchor, constant: -8),
+            revenueBudgetStackView.heightAnchor.constraint(equalToConstant: 78),
+
+            countriesStackView.leadingAnchor.constraint(equalTo: scrollViewContainer.leadingAnchor, constant: 8),
+            countriesStackView.trailingAnchor.constraint(equalTo: scrollViewContainer.trailingAnchor, constant: -8),
             
-            countriesStackView.topAnchor.constraint(equalTo: companiesStackView.bottomAnchor, constant: 20),
-            countriesStackView.leadingAnchor.constraint(equalTo: scrollViewContainer.leadingAnchor, constant: 16),
-            countriesStackView.trailingAnchor.constraint(equalTo: scrollViewContainer.trailingAnchor, constant: -16),
-            countriesStackView.heightAnchor.constraint(equalToConstant: 60),
+            companiesStackView.leadingAnchor.constraint(equalTo: scrollViewContainer.leadingAnchor, constant: 8),
+            companiesStackView.trailingAnchor.constraint(equalTo: scrollViewContainer.trailingAnchor, constant: -8),
             
             activityIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             activityIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor)
@@ -163,88 +165,180 @@ class FilmViewController: UIViewController {
         scrollViewContainer.spacing = 8
         scrollViewContainer.alignment = .leading
         
-        companiesStackView.axis = .vertical
-        companiesStackView.spacing = 30
-        companiesStackView.distribution = .fillProportionally
+        filmTitleStackView.axis = .horizontal
+        filmTitleStackView.distribution = .fillEqually
+        filmTitleStackView.isLayoutMarginsRelativeArrangement = true
+        filmTitleStackView.layoutMargins = UIEdgeInsets(top: 8, left: 24, bottom: 8, right: 24)
         
-        countriesStackView.axis = .vertical
-        countriesStackView.spacing = 30
+        ratingVotePopularityStackView.axis = .horizontal
+        ratingVotePopularityStackView.spacing = 8
+        ratingVotePopularityStackView.distribution = .fillEqually
+        ratingVotePopularityStackView.isLayoutMarginsRelativeArrangement = true
+        ratingVotePopularityStackView.layoutMargins = UIEdgeInsets(top: 8, left: 0, bottom: 8, right: 0)
+        
+        releaseLanguageStackView.axis = .horizontal
+        releaseLanguageStackView.spacing = 16
+        releaseLanguageStackView.distribution = .fillEqually
+        releaseLanguageStackView.alignment = .center
+        releaseLanguageStackView.isLayoutMarginsRelativeArrangement = true
+        releaseLanguageStackView.layoutMargins = UIEdgeInsets(top: 0, left: 24, bottom: 0, right: 24)
+        
+        descriptionStackView.axis = .horizontal
+        descriptionStackView.spacing = 16
+        descriptionStackView.distribution = .fillEqually
+        descriptionStackView.alignment = .center
+        descriptionStackView.isLayoutMarginsRelativeArrangement = true
+        descriptionStackView.layoutMargins = UIEdgeInsets(top: 16, left: 24, bottom: 16, right: 24)
+        
+        runtimeStackView.axis = .horizontal
+        runtimeStackView.spacing = 16
+        runtimeStackView.distribution = .fillEqually
+        runtimeStackView.alignment = .center
+        runtimeStackView.isLayoutMarginsRelativeArrangement = true
+        runtimeStackView.layoutMargins = UIEdgeInsets(top: 0, left: 24, bottom: 0, right: 24)
+        
+        revenueBudgetStackView.axis = .horizontal
+        revenueBudgetStackView.spacing = 16
+        revenueBudgetStackView.distribution = .fillEqually
+        revenueBudgetStackView.alignment = .center
+        revenueBudgetStackView.isLayoutMarginsRelativeArrangement = true
+        revenueBudgetStackView.layoutMargins = UIEdgeInsets(top: 0, left: 24, bottom: 0, right: 24)
+        
+        countriesStackView.axis = .horizontal
+        countriesStackView.spacing = 16
         countriesStackView.distribution = .fillEqually
+        countriesStackView.alignment = .center
+        countriesStackView.isLayoutMarginsRelativeArrangement = true
+        countriesStackView.layoutMargins = UIEdgeInsets(top: 16, left: 24, bottom: 16, right: 24)
+        
+        companiesStackView.axis = .horizontal
+        companiesStackView.spacing = 16
+        companiesStackView.distribution = .fillEqually
+        companiesStackView.alignment = .center
+        companiesStackView.isLayoutMarginsRelativeArrangement = true
+        companiesStackView.layoutMargins = UIEdgeInsets(top: 16, left: 24, bottom: 16, right: 24)
     }
     
     private func setupViews() {
-        posterView.contentMode = .scaleAspectFill
+        posterImageView.contentMode = .scaleAspectFill
+        posterImageView.layer.cornerRadius = 24
+        posterImageView.clipsToBounds = true
+        
         infoBackGroundView.backgroundColor = Colors.primaryBackGroundColor
         infoBackGroundView.contentMode = .scaleAspectFill
-        
         infoBackGroundView.clipsToBounds = true
         infoBackGroundView.layer.cornerRadius = 24
         infoBackGroundView.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMinXMinYCorner]
         view.backgroundColor = Colors.primaryBackGroundColor
     }
     
-    private func setupLabels() {
-        filmTitle.font = UIFont.systemFont(ofSize: 37, weight: .bold)
-        filmTitle.textColor = Colors.primaryTextOnSurfaceColor
-        filmTitle.textAlignment = .left
-        filmTitle.numberOfLines = 0
-
-        releaseDateLabel.font = UIFont.systemFont(ofSize: 17, weight: .light)
-        releaseDateLabel.textColor = Colors.secondaryTextOnSurfaceColor
-        releaseDateLabel.textAlignment = .left
-        releaseDateLabel.numberOfLines = 0
-
-        overviewLabel.font = UIFont.systemFont(ofSize: 20, weight: .light)
-        overviewLabel.textColor = Colors.primaryTextOnSurfaceColor
-        overviewLabel.textAlignment = .left
-        overviewLabel.numberOfLines = 0
+    private func setupFilmInfoStackViews() {
+        filmTitleStackView.addArrangedSubview(filmTitleView)
         
-        runtimeLabel.font = UIFont.systemFont(ofSize: 15, weight: .light)
-        runtimeLabel.textColor = Colors.secondaryTextOnSurfaceColor
-        runtimeLabel.textAlignment = .left
-        runtimeLabel.numberOfLines = 0
-
-        budgetLabel.font = UIFont.systemFont(ofSize: 15, weight: .light)
-        budgetLabel.textColor = Colors.secondaryTextOnSurfaceColor
-        budgetLabel.textAlignment = .left
-        budgetLabel.numberOfLines = 0
-
-        revenueLabel.font = UIFont.systemFont(ofSize: 15, weight: .light)
-        revenueLabel.textColor = Colors.secondaryTextOnSurfaceColor
-        revenueLabel.textAlignment = .left
-        revenueLabel.numberOfLines = 0
+        ratingVotePopularityStackView.addArrangedSubview(ratingView)
+        ratingVotePopularityStackView.addArrangedSubview(voteCountView)
+        ratingVotePopularityStackView.addArrangedSubview(popularityView)
+       
+        releaseLanguageStackView.addArrangedSubview(releaseDateView)
+        releaseLanguageStackView.addArrangedSubview(languageFilmView)
         
-        countryNameLabel.font = UIFont.systemFont(ofSize: 15, weight: .light)
-        countryNameLabel.textColor = Colors.secondaryTextOnSurfaceColor
-        countryNameLabel.textAlignment = .left
-        countryNameLabel.numberOfLines = 0
+        descriptionStackView.addArrangedSubview(descriptionFilmView)
+        revenueBudgetStackView.addArrangedSubview(budgetFilmView)
+        revenueBudgetStackView.addArrangedSubview(revenueFilmView)
+        
+        runtimeStackView.addArrangedSubview(runtimeFilmView)
+        countriesStackView.addArrangedSubview(countryFilmView)
+        companiesStackView.addArrangedSubview(companyFilmView)
     }
     
-    private func configureSelf(with filmData: FilmResponse) {
-        filmTitle.text = filmData.title
-        releaseDateLabel.text = filmData.releaseDate
-        overviewLabel.text = filmData.overview
-        let posterUrl = URL(string: baseUrl.baseImageURL + filmData.poster)
-        posterView.posterImageView.sd_setImage(with: posterUrl, completed: nil)
-        posterView.posterBackGroundImageView.sd_setImage(with: posterUrl, completed: nil)
-        runtimeLabel.text = "run time: \(filmData.runtime) min."
-        posterView.voteLabel.text = String(filmData.voteAverage)
-        budgetLabel.text = "Budget: \(filmData.budget) $"
-        revenueLabel.text = "Revenue: \(filmData.revenue) $"
+    private func didTap() {
+        posterImageView.heartTapCallBack = { [weak self] in
+            self?.presenter?.saveFavoriteFilm()
+        }
+    }
+    
+    private func configureSelf(with filmData: FilmResponse, isLiked: Bool) {
+        filmTitleView.filmTitleLabel.text = filmData.title
+        descriptionFilmView.filmDescriptionLabel.text = filmData.description
+        let posterUrl = URL(string: NetworkСonstants.baseImageURL + filmData.poster)
+        posterImageView.posterImageView.sd_setImage(with: posterUrl, completed: nil)
+        posterImageView.posterBackGroundImageView.sd_setImage(with: posterUrl, completed: nil)
+        ratingView.ratingLabel.text = String(format: "%.1f",filmData.voteAverage)
+        ratingView.ratingNameLabel.text = "Rating"
+        voteCountView.voteCountLabel.text = String(filmData.voteCount)
+        voteCountView.voteCountNameLabel.text = "Vote count"
+        popularityView.popularutyLabel.text = String(format: "%.2f",filmData.popularity)
+        popularityView.popularityNameLabel.text = "Popularity"
+        releaseDateView.releaseLabel.text = String(filmData.releaseDate)
+        releaseDateView.releaseNameLabel.text = "Release"
+        languageFilmView.languageLabel.text = filmData.originalLanguage
+        languageFilmView.languageNameLabel.text = "Language"
+        runtimeFilmView.runtimeLabel.text = "\(filmData.runtime) min"
+        runtimeFilmView.runtimeNameLabel.text = "Runtime:"
+        budgetFilmView.budgetLabel.text = "\(filmData.budget) $"
+        budgetFilmView.budgetNameLabel.text = "Budget:"
+        revenueFilmView.revenueLabel.text = "\(filmData.revenue) $"
+        revenueFilmView.revenueNameLabel.text = "Revenue:"
+        countryFilmView.countryNameLabel.text = "Country:"
+        companyFilmView.companyNameLabel.text = "Companies"
         
         for company in filmData.productionCompanies {
-            let companyView = CompanyView()
-            companyView.translatesAutoresizingMaskIntoConstraints = false
-            companiesStackView.addArrangedSubview(companyView)
-            let companyUrl = URL(string: baseUrl.baseImageURL + (company.logoPath ?? ""))
-            companyView.companyImageView.sd_setImage(with: companyUrl, completed: nil)
-            companyView.companyNameLabel.text = company.name
+            let infoView = CompanyInfoFilmView()
+            infoView.translatesAutoresizingMaskIntoConstraints = false
+            companyFilmView.companyStackView.addArrangedSubview(infoView)
+            let companyUrl = URL(string: NetworkСonstants.baseImageURL + (company.logoPath ?? ""))
+            infoView.companyImageView.sd_setImage(with: companyUrl, completed: nil)
+            infoView.companyLabel.text = company.name
         }
         
         for country in filmData.productionCountry {
-            countriesStackView.addArrangedSubview(countryNameLabel)
-            countryNameLabel.text = "Country: \(country.name)"
+            let infoView = CountryInfoFilmView()
+            infoView.translatesAutoresizingMaskIntoConstraints = false
+            countryFilmView.countryStackView.addArrangedSubview(infoView)
+            infoView.countryLabel.translatesAutoresizingMaskIntoConstraints = false
+            infoView.countryLabel.text = country.name
         }
+        
+        if isLiked == false {
+            posterImageView.likeButtonisTepped = false
+            posterImageView.favoriteFilmButtonImageView.image = UIImage(named: "dislike")?.withRenderingMode(.alwaysTemplate)
+        } else {
+            posterImageView.likeButtonisTepped = true
+            posterImageView.favoriteFilmButtonImageView.image = UIImage(named: "like")?.withRenderingMode(.alwaysTemplate)
+        }
+    }
+    
+    private func errorAlert() {
+        let alert = UIAlertController(title: "Error", message: "Something went wrong. Try again later", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Try again", style: .default, handler: { [self] action in
+            presenter?.loadData()
+        }))
+        
+        alert.addAction(UIAlertAction(title: "Cancel", style: .destructive, handler: { [self] action in
+            presenter?.didTapCancel()
+        }))
+        self.present(alert, animated: true, completion: nil)
+    }
+}
+
+//MARK: FilmViewControllerProtocol
+extension FilmViewController: FilmViewControllerProtocol {
+    
+    func updateView(filmData: FilmResponse) {
+        activityIndicator.stopAnimating()
+        configureSelf(with: filmData, isLiked: presenter?.isFilmLiked() ?? isliked)
+    }
+    
+    func showActivityIndicator() {
+        activityIndicator.startAnimating()
+    }
+    
+    func showErrorAlert() {
+        errorAlert()
+    }
+    
+    func didTapButton() {
+        didTap()
     }
 }
 

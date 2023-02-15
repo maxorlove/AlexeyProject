@@ -9,14 +9,14 @@ import UIKit
 
 class ChangeProfileInfoViewController: UIViewController {
     
-    // MARK: - Properties
-   private let infoChangeStackView = UIStackView()
-   private let nameView = ChangeInfoView()
-   private let emailView = ChangeEmailView()
-
-   private let changeAvatarImageButton = UIButton()
-   private let saveButton = UIButton()
+    // MARK: - Private Properties
+    private let infoChangeStackView = UIStackView()
+    private let nameView = ChangeInfoView()
+    private let emailView = ChangeEmailView()
+    private let changeAvatarImageButton = UIButton()
+    private let saveButton = UIButton()
     
+    // MARK: - Private Properties
     var profile: Profile?
     weak var delegate: ProfileViewDelegate?
     var activeTextField : UITextField?
@@ -32,7 +32,7 @@ class ChangeProfileInfoViewController: UIViewController {
         delegateTextField()
     }
     
-    // MARK: - Methods
+    // MARK: - Private Methods
     private func setup() {
         addSubviews()
         setupConstraints()
@@ -197,6 +197,7 @@ class ChangeProfileInfoViewController: UIViewController {
 
 // MARK: - UIImagePickerControllerDelegate
 extension ChangeProfileInfoViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+   
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         if let image = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
             let dataImage = image.pngData() as? NSData
@@ -217,6 +218,7 @@ extension ChangeProfileInfoViewController: UIImagePickerControllerDelegate, UINa
 
 //MARK: - UITextFieldDelegate
 extension ChangeProfileInfoViewController: UITextFieldDelegate {
+   
     func textFieldDidBeginEditing(_ textField: UITextField) {
         self.activeTextField = textField
     }

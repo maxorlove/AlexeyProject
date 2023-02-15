@@ -9,7 +9,7 @@ import UIKit
 
 class TabBarController: UITabBarController, UITabBarControllerDelegate {
     
-    //MARK: - Properties
+    //MARK: - Private Properties
     private let filmsTabBarItem = UITabBarItem()
     private let filmsViewController = UINavigationController(rootViewController: FilmsAssembly.build())
     private let profileViewController = UINavigationController(rootViewController: ProfileAssembly.build())
@@ -29,7 +29,7 @@ class TabBarController: UITabBarController, UITabBarControllerDelegate {
         self.viewControllers = [filmsViewController, profileViewController]
     }
     
-    //MARK: - Methods
+    //MARK: - Private Methods
     private func setup() {
         setupTabBar()
     }

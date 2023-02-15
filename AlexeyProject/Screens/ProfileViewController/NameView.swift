@@ -9,7 +9,7 @@ import UIKit
 
 class NameView: UIView {
     
-    //MARK: - Properties
+    //MARK: - Public Properties
     let nameLabel = UILabel()
     let nameText = UILabel()
     
@@ -23,6 +23,7 @@ class NameView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    //MARK: - Private Methods
     private func setupView() {
         addSubviews()
         setupConstraints()

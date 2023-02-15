@@ -9,22 +9,27 @@ import UIKit
 import Foundation
 
 protocol FilmsRouterProtocol: AnyObject {
-    func showFilmView(film: Film)
+    
+    //MARK: - Public Methods
+    func showFilmView(film: Film, likePressed: @escaping () -> Void)
 }
 
 final class FilmsRouter {
+    
+    //MARK: - Public Properties
     weak var viewController: UIViewController?
     
+    //MARK: - Init
     init(viewController: UIViewController) {
         self.viewController = viewController
     }
 }
 
+//MARK: - FilmsRouterProtocol
 extension FilmsRouter: FilmsRouterProtocol {
-    
-    func showFilmView(film: Film) {
-        let controller = FilmViewController()
-        controller.film = film
+    func showFilmView(film: Film, likePressed: @escaping () -> Void) {
+        let controller = FilmAssembly.build(id: film.id, likePressed: likePressed)
         viewController?.navigationController?.pushViewController(controller, animated: true)
+
     }
 }

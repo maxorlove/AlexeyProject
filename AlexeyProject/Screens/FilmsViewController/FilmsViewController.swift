@@ -9,13 +9,19 @@ import UIKit
 import SDWebImage
 
 protocol FilmsViewControllerProtocol: AnyObject {
+    
+    //MARK: - Public Methods
     func updateView(films: FilmsResponse)
     func showActivityIndicator()
+    func setupSortingLabel(navigationItemTitle: String, sortButtonLabel: String)
+    func showErrorAlert()
+//    func filmsCellUpdate(indexPath: IndexPath)
+    func filmCell()
 }
 
 class FilmsViewController: UIViewController {
     
-    //MARK: - Properties
+    //MARK: - Private Properties
     private let collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
@@ -27,56 +33,78 @@ class FilmsViewController: UIViewController {
     
     private var dataSource: [Film] = []
     private let switchCollectionButton = UIButton()
+    private let switchCollectionButtonImageView = UIImageView()
     private let sortFilmsButton = UIButton()
+    private let sortFilmsButtonLabel = UILabel()
+    private let sortFilmsButtonChevronView = UIImageView()
+    private let customBlurEffectViewForSortButton = UIVisualEffectView(effect: UIBlurEffect(style: .systemUltraThinMaterialLight))
+    private let customBlurEffectViewForSwitchButton = UIVisualEffectView(effect: UIBlurEffect(style: .systemUltraThinMaterialLight))
     private let activityIndicator = UIActivityIndicatorView(style: .large)
     private let refreshControl = UIRefreshControl()
-    private var selectedLayout: CellLayout = .twoCell
+    private var selectedLayout: CellLayout = .gridCell
+    private var isFavorite = false
     
+    //MARK: - Private Enums
     private enum CellLayout {
-        case oneCell
-        case twoCell
+        case singleCell
+        case gridCell
     }
     
     private enum ConstantsForCell {
-        static let twoCellReuseId = "GridCollectionViewCellIdentifier"
-        static let oneCellReuseId = "OneCollectionViewCellIdentifier"
+        static let gridCellReuseId = "GridCollectionViewCellIdentifier"
+        static let singleCellReuseId = "SingleCollectionViewCellIdentifier"
         static let numberOfItemsInRow: CGFloat = 2
-        static let spacingForOne: CGFloat = 0
-        static let spacingForTwo: CGFloat = 8
-        static let cellWidthForOne = UIScreen.main.bounds.width
-        static let cellWidthForTwo = UIScreen.main.bounds.width/numberOfItemsInRow - 12
-        static let cellHeightForOne: CGFloat = 204
-        static let cellHeightForTwo: CGFloat = 276
-        static let insetForSectionOne = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-        static let insetForSectionTwo = UIEdgeInsets(top: 4, left: 8, bottom: 0, right: 8)
+        static let spacingForSingle: CGFloat = 0
+        static let spacingForGrid: CGFloat = 8
+        static let cellWidthForSingle = UIScreen.main.bounds.width
+        static let cellWidthForGrid = UIScreen.main.bounds.width/numberOfItemsInRow - 12
+        static let cellHeightForSingle: CGFloat = 204
+        static let cellHeightForGrid: CGFloat = 276
+        static let insetForSectionSingle = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+        static let insetForSectionGrid = UIEdgeInsets(top: 4, left: 8, bottom: 0, right: 8)
     }
     
+    //MARK: - Publick Properties
     var presenter: FilmsPresenterProtocol?
     
     // MARK: - LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
+//        UserDefaults.standard.removeObject(forKey: "favoriteFilms")
         presenter?.viewDidload()
     }
     
-    // MARK: - Methods
+    // MARK: - Private Methods
     private func setup() {
         addSubviews()
         layout()
         setupCollectionView()
         setupNavBar()
         setupButton()
+        setupLabels()
+        setupImageView()
+        shadowEffect()
     }
     
     private func addSubviews() {
         view.addSubview(collectionView)
+        view.addSubview(customBlurEffectViewForSortButton)
+        view.addSubview(customBlurEffectViewForSwitchButton)
         view.addSubview(switchCollectionButton)
+        view.addSubview(switchCollectionButtonImageView)
         view.addSubview(sortFilmsButton)
+        view.addSubview(sortFilmsButtonLabel)
+        view.addSubview(sortFilmsButtonChevronView)
         view.addSubview(activityIndicator)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
+        customBlurEffectViewForSortButton.translatesAutoresizingMaskIntoConstraints = false
+        customBlurEffectViewForSwitchButton.translatesAutoresizingMaskIntoConstraints = false
         switchCollectionButton.translatesAutoresizingMaskIntoConstraints = false
+        switchCollectionButtonImageView.translatesAutoresizingMaskIntoConstraints = false
         sortFilmsButton.translatesAutoresizingMaskIntoConstraints = false
+        sortFilmsButtonLabel.translatesAutoresizingMaskIntoConstraints = false
+        sortFilmsButtonChevronView.translatesAutoresizingMaskIntoConstraints = false
         activityIndicator.translatesAutoresizingMaskIntoConstraints = false
         activityIndicator.hidesWhenStopped = true
     }
@@ -88,11 +116,39 @@ class FilmsViewController: UIViewController {
             collectionView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
             collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
             
-            sortFilmsButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 61.81),
+            customBlurEffectViewForSortButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 104),
+            customBlurEffectViewForSortButton.heightAnchor.constraint(equalToConstant: 48),
+            customBlurEffectViewForSortButton.widthAnchor.constraint(equalToConstant: 121),
+            customBlurEffectViewForSortButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -16),
+            
+            sortFilmsButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 104),
+            sortFilmsButton.heightAnchor.constraint(equalToConstant: 48),
+            sortFilmsButton.widthAnchor.constraint(equalToConstant: 121),
             sortFilmsButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -16),
             
-            switchCollectionButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -61.81),
+            sortFilmsButtonLabel.topAnchor.constraint(equalTo: sortFilmsButton.topAnchor, constant: 16),
+            sortFilmsButtonLabel.leadingAnchor.constraint(equalTo: sortFilmsButton.leadingAnchor, constant: 12),
+            sortFilmsButtonLabel.bottomAnchor.constraint(equalTo: sortFilmsButton.bottomAnchor, constant: -16),
+
+            sortFilmsButtonChevronView.topAnchor.constraint(equalTo: sortFilmsButton.topAnchor, constant: 12),
+            sortFilmsButtonChevronView.leadingAnchor.constraint(equalTo: sortFilmsButtonLabel.trailingAnchor, constant: 8),
+            sortFilmsButtonChevronView.trailingAnchor.constraint(equalTo: sortFilmsButton.trailingAnchor, constant: -12),
+            sortFilmsButtonChevronView.bottomAnchor.constraint(equalTo: sortFilmsButton.bottomAnchor, constant: -12),
+            
+            customBlurEffectViewForSwitchButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -104),
+            customBlurEffectViewForSwitchButton.heightAnchor.constraint(equalToConstant: 48),
+            customBlurEffectViewForSwitchButton.widthAnchor.constraint(equalToConstant: 56),
+            customBlurEffectViewForSwitchButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -16),
+            
+            switchCollectionButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -104),
+            switchCollectionButton.heightAnchor.constraint(equalToConstant: 48),
+            switchCollectionButton.widthAnchor.constraint(equalToConstant: 56),
             switchCollectionButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -16),
+            
+            switchCollectionButtonImageView.topAnchor.constraint(equalTo: switchCollectionButton.topAnchor, constant: 12),
+            switchCollectionButtonImageView.leadingAnchor.constraint(equalTo: switchCollectionButton.leadingAnchor, constant: 16),
+            switchCollectionButtonImageView.trailingAnchor.constraint(equalTo: switchCollectionButton.trailingAnchor, constant: -16),
+            switchCollectionButtonImageView.bottomAnchor.constraint(equalTo: switchCollectionButton.bottomAnchor, constant: -12),
             
             activityIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             activityIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor)
@@ -113,29 +169,69 @@ class FilmsViewController: UIViewController {
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.refreshControl = refreshControl
-        collectionView.register(FilmGridCollectionViewCell.self, forCellWithReuseIdentifier: ConstantsForCell.twoCellReuseId)
-        collectionView.register(OneFilmCollectionViewCell.self, forCellWithReuseIdentifier: ConstantsForCell.oneCellReuseId)
+        collectionView.register(GridFilmsCollectionViewCell.self, forCellWithReuseIdentifier: ConstantsForCell.gridCellReuseId)
+        collectionView.register(SingleFilmCollectionViewCell.self, forCellWithReuseIdentifier: ConstantsForCell.singleCellReuseId)
     }
     
     private func setupButton() {
-        switchCollectionButton.setImage(UIImage(named: "oneCell"), for: [])
-        switchCollectionButton.contentMode = .scaleAspectFill
+        switchCollectionButton.backgroundColor = Colors.primaryBackGroundColor?.withAlphaComponent(0.5)
+        switchCollectionButton.layer.cornerRadius = 20
+        switchCollectionButton.layer.masksToBounds = true
         switchCollectionButton.addTarget(self, action: #selector(switchCollectionOfFilms), for: .touchUpInside)
         
-        sortFilmsButton.setImage(UIImage(named: "sort"), for: [])
-        sortFilmsButton.contentMode = .scaleAspectFill
+        sortFilmsButton.backgroundColor = Colors.primaryBackGroundColor?.withAlphaComponent(0.5)
+        sortFilmsButton.layer.cornerRadius = 20
+        sortFilmsButton.layer.masksToBounds = true
         sortFilmsButton.addTarget(self, action: #selector(sortingFilms), for: .touchUpInside)
         
         refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
     }
     
+    private func setupLabels() {
+        sortFilmsButtonLabel.text = "POPULAR"
+        sortFilmsButtonLabel.textColor = Colors.primaryTextOnSurfaceColor
+        sortFilmsButtonLabel.font = UIFont.systemFont(ofSize: 13, weight: .medium)
+        sortFilmsButtonLabel.textAlignment = .center
+        sortFilmsButtonLabel.numberOfLines = 0
+    }
+    
+    private func setupImageView() {
+        sortFilmsButtonChevronView.contentMode = .scaleAspectFit
+        sortFilmsButtonChevronView.image = UIImage(systemName: "chevron.down")
+        sortFilmsButtonChevronView.tintColor = Colors.primaryTextOnBackGroundColor
+        
+        switchCollectionButtonImageView.contentMode = .scaleAspectFill
+        switchCollectionButtonImageView.image = UIImage(named: "oneCell")?.withRenderingMode(.alwaysTemplate)
+        switchCollectionButtonImageView.tintColor = Colors.primaryTextOnBackGroundColor
+    }
+    
+    private func shadowEffect() {
+        sortFilmsButton.layer.shadowColor = UIColor.black.cgColor
+        sortFilmsButton.layer.shadowOpacity = 0.4
+        sortFilmsButton.layer.shadowOffset = CGSize.zero
+        sortFilmsButton.layer.shadowRadius = 20
+        sortFilmsButton.layer.masksToBounds = false
+        
+        switchCollectionButton.layer.shadowColor = UIColor.black.cgColor
+        switchCollectionButton.layer.shadowOpacity = 0.4
+        switchCollectionButton.layer.shadowOffset = CGSize.zero
+        switchCollectionButton.layer.shadowRadius = 20
+        switchCollectionButton.layer.masksToBounds = false
+        
+        customBlurEffectViewForSortButton.layer.cornerRadius = 20
+        customBlurEffectViewForSortButton.layer.masksToBounds = true
+        
+        customBlurEffectViewForSwitchButton.layer.cornerRadius = 20
+        customBlurEffectViewForSwitchButton.layer.masksToBounds = true
+    }
+    
     private func switchCollectionLayout() {
-        if selectedLayout == CellLayout.twoCell {
-            selectedLayout = CellLayout.oneCell
-            switchCollectionButton.setImage(UIImage(named: "twoCell"), for: [])
+        if selectedLayout == CellLayout.gridCell {
+            selectedLayout = CellLayout.singleCell
+            switchCollectionButtonImageView.image = UIImage(named: "twoCell")?.withRenderingMode(.alwaysTemplate)
         } else {
-            selectedLayout = CellLayout.twoCell
-            switchCollectionButton.setImage(UIImage(named: "oneCell"), for: [])
+            selectedLayout = CellLayout.gridCell
+            switchCollectionButtonImageView.image = UIImage(named: "oneCell")?.withRenderingMode(.alwaysTemplate)
         }
         collectionView.reloadData()
     }
@@ -176,20 +272,41 @@ class FilmsViewController: UIViewController {
         self.present(alert, animated: true, completion: nil)
     }
     
+    private func errorAlert() {
+        let alert = UIAlertController(title: "Error", message: "Something went wrong. Try again later", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Try again", style: .default, handler: { [self] action in
+            refreshDataSource()
+            presenter?.viewDidload()
+        }))
+        alert.addAction(UIAlertAction(title: "Cancel", style: .destructive, handler: { [self] action in
+            activityIndicator.stopAnimating()
+        }))
+        self.present(alert, animated: true, completion: nil)
+    }
+    
+    private func isFilmLiked(film: Film) -> Bool {
+        var liked = false
+        var arrayFilmsId = UserDefaults.standard.array(forKey: "favoriteFilms")  as? [Int] ?? [Int]()
+        if arrayFilmsId.contains(film.id) {
+            liked = true
+        }
+        return liked
+    }
+    
     private func refreshDataSource() {
         dataSource = []
         presenter?.refreshDataSource()
     }
 
-    @objc func sortingFilms(sender: UIButton) {
+    @objc private func sortingFilms(sender: UIButton) {
         sortAlert()
     }
     
-    @objc func switchCollectionOfFilms(sender: UIButton) {
+    @objc private func switchCollectionOfFilms(sender: UIButton) {
         switchCollectionLayout()
     }
     
-     @objc func refresh(sender: UIButton) {
+     @objc private func refresh(sender: UIButton) {
          dataSource = []
          presenter?.refreshDataSource()
          presenter?.viewDidload()
@@ -198,29 +315,37 @@ class FilmsViewController: UIViewController {
 
 //MARK: - UICollectionViewDataSource
 extension FilmsViewController: UICollectionViewDataSource {
-    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return dataSource.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let film = dataSource[indexPath.row]
+        guard indexPath.row < dataSource.count else {
+            return UICollectionViewCell()
+        }
         
+        let film = dataSource[indexPath.row]
         switch selectedLayout{
-        case .oneCell:
+        case .singleCell:
             let cell = collectionView.dequeueReusableCell(
-                withReuseIdentifier: ConstantsForCell.oneCellReuseId,
+                withReuseIdentifier: ConstantsForCell.singleCellReuseId,
                 for: indexPath
-            ) as! OneFilmCollectionViewCell
-            cell.configure(with: film)
+            ) as! SingleFilmCollectionViewCell
+            cell.configure(with: film, isliked: isFilmLiked(film: film))
+            cell.heartTapCellCallBack = { [weak self] in
+                self?.presenter?.saveFavoriteFilm(film: film, indexPath: indexPath)
+            }
             return cell
             
-        case .twoCell:
+        case .gridCell:
             let cell = collectionView.dequeueReusableCell(
-                withReuseIdentifier: ConstantsForCell.twoCellReuseId,
+                withReuseIdentifier: ConstantsForCell.gridCellReuseId,
                 for: indexPath
-            ) as! FilmGridCollectionViewCell
-            cell.configure(with: film)
+            ) as! GridFilmsCollectionViewCell
+            cell.configure(with: film, isliked: isFilmLiked(film: film))
+            cell.heartTapLikeCallBack = { [weak self] in
+                self?.presenter?.saveFavoriteFilm(film: film, indexPath: indexPath)
+            }
             return cell
         }
     }
@@ -230,31 +355,31 @@ extension FilmsViewController: UICollectionViewDataSource {
 extension FilmsViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         switch selectedLayout{
-        case .oneCell:
-            return CGSize(width: ConstantsForCell.cellWidthForOne, height: ConstantsForCell.cellHeightForOne)
+        case .singleCell:
+            return CGSize(width: ConstantsForCell.cellWidthForSingle, height: ConstantsForCell.cellHeightForSingle)
             
-        case .twoCell:
-            return CGSize(width: ConstantsForCell.cellWidthForTwo, height: ConstantsForCell.cellHeightForTwo)
+        case .gridCell:
+            return CGSize(width: ConstantsForCell.cellWidthForGrid, height: ConstantsForCell.cellHeightForGrid)
         }
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
         switch selectedLayout{
-        case .oneCell:
-            return ConstantsForCell.insetForSectionOne
+        case .singleCell:
+            return ConstantsForCell.insetForSectionSingle
             
-        case .twoCell:
-            return ConstantsForCell.insetForSectionTwo
+        case .gridCell:
+            return ConstantsForCell.insetForSectionGrid
         }
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         switch selectedLayout{
-        case .oneCell:
-            return ConstantsForCell.spacingForOne
-            
-        case .twoCell:
-            return ConstantsForCell.spacingForTwo
+        case .singleCell:
+            return ConstantsForCell.spacingForSingle
+    
+        case .gridCell:
+            return ConstantsForCell.spacingForGrid
         }
     }
     
@@ -267,7 +392,7 @@ extension FilmsViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let indexOfView = indexPath.row
         let film = dataSource[indexOfView]
-        presenter?.didTapCell(film: film)
+        presenter?.didTapCell(film: film, indexPath: indexPath)
     }
 }
 
@@ -283,6 +408,23 @@ extension FilmsViewController: FilmsViewControllerProtocol {
     
     func showActivityIndicator() {
         activityIndicator.startAnimating()
+    }
+    
+    func setupSortingLabel(navigationItemTitle: String, sortButtonLabel: String) {
+        navigationItem.title = navigationItemTitle
+        sortFilmsButtonLabel.text = sortButtonLabel
+    }
+    
+    func showErrorAlert() {
+        errorAlert()
+    }
+    
+//    func filmsCellUpdate(indexPath: IndexPath) {
+//        collectionView.reloadItems(at: [indexPath])
+//    }
+    
+    func filmCell() {
+        collectionView.reloadData()
     }
 }
 

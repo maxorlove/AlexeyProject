@@ -9,7 +9,7 @@ import UIKit
 
 class ChangeEmailView: UIView {
     
-    //MARK: - Properties
+    //MARK: - Public Properties
     let emailLabel = UILabel()
     let emailTextField = UITextField()
     
@@ -23,6 +23,7 @@ class ChangeEmailView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    //MARK: - Private Methods
     private func setupView() {
         addSubviews()
         setupConstraints()

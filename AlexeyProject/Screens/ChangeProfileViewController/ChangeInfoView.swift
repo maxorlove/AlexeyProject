@@ -9,7 +9,7 @@ import UIKit
 
 class ChangeInfoView: UIView {
     
-    //MARK: - Properties
+    //MARK: - Public Properties
     let nameLabel = UILabel()
     let nameTextField = UITextField()
     
@@ -23,6 +23,7 @@ class ChangeInfoView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    //MARK: - Private Methods
     private func setupView() {
         addSubviews()
         setupConstraints()

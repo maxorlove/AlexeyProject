@@ -8,18 +8,21 @@
 import UIKit
 
 protocol ProfileViewDelegate: AnyObject {
+    
+    //MARK: - Public Methods
     func changingInfo(profile: Profile)
 }
 
 class ProfileInfoViewController: UIViewController {
     
-    // MARK: - Properties
+    // MARK: - Private Properties
    private let infoStackView = UIStackView()
    private let nameView = NameView()
    private let emailView = EmailView()
    private let userAvatarImage = UIImageView()
-    
    private let changeButton = UIButton()
+    
+    // MARK: - Public Properties
     var profile: Profile = .init(
         name: UserDefaults.standard.string(forKey: "name") ?? "",
         email: UserDefaults.standard.string(forKey: "email") ?? "",
@@ -33,7 +36,7 @@ class ProfileInfoViewController: UIViewController {
         setup()
     }
     
-    // MARK: - Methods
+    // MARK: - Private Methods
     private func setup() {
         addSubviews()
         setupConstraints()
@@ -111,8 +114,9 @@ class ProfileInfoViewController: UIViewController {
     }
 }
     
-    // MARK: - Routing
+// MARK: - Routing
 extension ProfileInfoViewController {
+    
     @objc func changeProfile(sender: UIButton) {
         let controller = ChangeProfileInfoViewController()
         controller.profile = profile
@@ -121,7 +125,9 @@ extension ProfileInfoViewController {
     }
 }
 
+//MARK: - ProfileViewDelegate
 extension ProfileInfoViewController: ProfileViewDelegate {
+    
     func changingInfo(profile: Profile) {
         nameView.nameText.text = UserDefaults.standard.string(forKey: "name")
         emailView.emailText.text = UserDefaults.standard.string(forKey: "email")

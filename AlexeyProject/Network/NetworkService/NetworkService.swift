@@ -16,8 +16,9 @@ protocol FilmsNetworkProtocol {
 
 final class NetworkService {}
 
-extension NetworkService: FilmsNetworkProtocol {
 
+//MARK: - FilmsNetworkProtocol
+extension NetworkService: FilmsNetworkProtocol {
     func allPopularFilms(page: Int, completion: @escaping(Result<FilmsResponse, ErrorModel>) -> Void) -> URLSessionDataTask {
         let request = ServiceManager.shared.sendRequest(request: PopularFilmsRequest(page: page), completion: completion)
         return request
